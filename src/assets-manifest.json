@@ -1,0 +1,50 @@
+{
+  "images": {
+    "hero-tooth": {
+      "widths": [
+        480,
+        800,
+        1200,
+        1800
+      ],
+      "ratio": 1.7917,
+      "lqip": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAABwAwCdASoYAA0APu1iqU2ppaOiMAgBMB2JQBOgBC8jRl4bGcAA/vQp4jH8qkap/YkVsLCGFtO5NRmHja/PhuUbG9x96w4eCvuOAlNc5z2+MzgA"
+    },
+    "clinic-reception": {
+      "widths": [
+        480,
+        800,
+        1200,
+        1800
+      ],
+      "ratio": 1.3393,
+      "lqip": "data:image/webp;base64,UklGRqgAAABXRUJQVlA4IJwAAAAQBQCdASoYABIAPu1sq1EppaOiqAqpMB2JYwDG9BI/cfrAv8OehYNK040dBk8H+6zMAP7n86Y97jLI38IrR5hN5S1/otBOYtDQypPU1b9TbiniBYoxp675NLvSPI9mV1G2YArnyfoJojZPpza9NvvgZR5snmZOaccMhfkwGQ/PZ6pDJMhhB67v02CM3HVsoqjSaOa1m7VefAAAAAA="
+    },
+    "clinic-room": {
+      "widths": [
+        480,
+        800,
+        1200,
+        1800
+      ],
+      "ratio": 1.3393,
+      "lqip": "data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAAAwBQCdASoYABIAPu1kq1AppSOisBgIATAdiWcAACnciSBoxClkgZOaDpcjaO5VKNG3QAD99wS/39lCOXKHyVpsMxBHpQXoLHHnX2K0rPJhlQEPOvEdcQqK/hVkgiyEn0C5Kt17fmupXiRCTlqkp+NJafL3huaIyRQFAAAA"
+    },
+    "doctor-aarav": {
+      "widths": [
+        400,
+        800
+      ],
+      "ratio": 1,
+      "lqip": "data:image/webp;base64,UklGRsIAAABXRUJQVlA4ILYAAAAwBQCdASoYABgAPu1mq06ppaQiKA1RMB2JQBfJMYOOFqP+jNto5QJgnr9I+/1o2+AAWAD+7oWnd0A8b1DQuotjTTpqav6pesMujoN3EXEqHqGanUMorFGer6xnfj5ssfGSFoytUcZ/MOW/guDvUxMuUGwAdacHZrgkj/W8cRLMwInwxf6ahv/SKMEySAgReOyvXVySNnU//Q4eBz6LICOrTX4nYHmb0ouwP/vwG3SsqZepKkAAAA=="
+    }
+  },
+  "videos": {
+    "hero-bg": {
+      "lqip": "data:image/webp;base64,UklGRpwAAABXRUJQVlA4IJAAAADwAwCdASoYAA4APu1iqU2ppaQiMAgBMB2JaACdACHXHQwwdTEiV3qYAP7yncHAGU+Eb3bvNVEGO9+8nHF5drf3iirXKseoqJGtV0YLOFxYt0SaX0siDAgYo0mGnGxgBqy04uf6m0vf29hxcDsn4kIyt30zd7Mo+tvqA9IeNJfn69Q37WYQd3Ub/WUAeA6AAAA="
+    },
+    "tooth-spin": {
+      "lqip": "data:image/webp;base64,UklGRoIAAABXRUJQVlA4IHYAAADQAwCdASoYAA4APu1iqU2ppaOiMAgBMB2JYwCsACHfwVqskH+dAAAA/vQwigdjbkcPDEfZlYQKnm1oV8wpeUTzr48w7VKTcMEgzA1cLD5s+fL0OeEfN3b8k4Mn2Pet9agtOemz4rUKPU0qNPp0m6o6oqQE5DQA"
+    }
+  }
+}

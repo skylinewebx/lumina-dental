@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Lumina Dental Care — a calm, modern dental clinic. Gentle, precise care with advanced technology." />
+    <title>Lumina Dental Care — Dentistry that feels like light</title>
+
+    <!-- Preload the hero image (LCP) responsively, AVIF with WebP intent -->
+    <link rel="preload" as="image" type="image/avif" fetchpriority="high"
+          imagesrcset="/assets/images/hero-tooth-800.avif 800w, /assets/images/hero-tooth-1200.avif 1200w, /assets/images/hero-tooth-1800.avif 1800w"
+          imagesizes="(max-width: 900px) 100vw, 62vw" />
+
+    <!-- Self-hosted fonts (Latin subset). Preload the two used above the fold
+         so text is crisp immediately and never reflows (no CLS from swap). -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/fraunces-300.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/manrope-300.woff2" crossorigin />
+  </head>
+  <body>
+    <!-- Scroll progress bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Custom cursor (hidden on touch) -->
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <!-- ===================== NAVBAR ===================== -->
+    <header class="nav" id="nav">
+      <a href="#top" class="nav__logo" data-cursor>
+        <span class="nav__logo-mark" aria-hidden="true"></span>
+        <span class="nav__logo-text">Lumina</span>
+      </a>
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#services" data-cursor>Services</a>
+        <a href="#pricing" data-cursor>Pricing</a>
+        <a href="#doctors" data-cursor>Doctors</a>
+        <a href="#reviews" data-cursor>Reviews</a>
+        <a href="#contact" data-cursor>Contact</a>
+      </nav>
+      <div class="nav__actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark theme" data-cursor>
+          <span class="theme-toggle__track"><span class="theme-toggle__thumb"></span></span>
+        </button>
+        <a href="#appointment" class="btn btn--primary" data-magnetic data-cursor>Book visit</a>
+      </div>
+      <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </header>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+      <a href="#services">Services</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#doctors">Doctors</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Contact</a>
+      <a href="#appointment" class="btn btn--primary">Book visit</a>
+    </div>
+
+    <main id="top">
+      <!-- ===================== HERO ===================== -->
+      <section class="hero" id="hero">
+        <!-- Ambient bokeh loop (lazy, poster-first, fades in) -->
+        <div class="hero__bg" id="heroBg" aria-hidden="true"></div>
+        <!-- Instant LCP poster: the glossy tooth. Crossfades to the live 3D. -->
+        <picture class="hero__poster" id="heroPoster" aria-hidden="true">
+          <source type="image/avif"
+                  srcset="/assets/images/hero-tooth-800.avif 800w, /assets/images/hero-tooth-1200.avif 1200w, /assets/images/hero-tooth-1800.avif 1800w"
+                  sizes="(max-width: 900px) 100vw, 62vw" />
+          <source type="image/webp"
+                  srcset="/assets/images/hero-tooth-800.webp 800w, /assets/images/hero-tooth-1200.webp 1200w, /assets/images/hero-tooth-1800.webp 1800w"
+                  sizes="(max-width: 900px) 100vw, 62vw" />
+          <img src="/assets/images/hero-tooth-1200.webp" alt="" fetchpriority="high"
+               decoding="async" width="1600" height="894" />
+        </picture>
+        <canvas class="hero__canvas" id="heroCanvas" aria-hidden="true"></canvas>
+        <div class="hero__glow" aria-hidden="true"></div>
+        <div class="hero__inner">
+          <p class="hero__eyebrow" data-reveal>SMALL CLINIC · BIG CARE · EST. 2024</p>
+          <!-- Rendered statically for instant LCP + zero layout shift; content.js
+               re-syncs it from config (same text → no shift). -->
+          <h1 class="hero__title" id="heroTitle" aria-label="Dentistry that feels like light."><span class="word"><span class="inner">Dentistry</span></span> <span class="word"><span class="inner">that</span></span> <span class="word"><span class="inner">feels</span></span> <span class="word"><span class="inner">like</span></span> <span class="word"><span class="inner accent">light.</span></span></h1>
+          <p class="hero__sub" data-reveal>A calm, modern clinic built around gentle, precise care. Advanced technology, unhurried appointments, and a team that actually listens.</p>
+          <div class="hero__cta" data-reveal>
+            <a href="#appointment" class="btn btn--primary btn--lg" data-magnetic data-cursor>Book an appointment</a>
+            <a href="#services" class="btn btn--ghost btn--lg" data-magnetic data-cursor>Explore services</a>
+          </div>
+          <div class="hero__stats" data-reveal>
+            <div><strong>12k+</strong><span>Smiles cared for</span></div>
+            <div><strong>4.9★</strong><span>Patient rating</span></div>
+            <div><strong>Same-day</strong><span>Emergency slots</span></div>
+          </div>
+        </div>
+        <div class="hero__scroll" aria-hidden="true"><span>SCROLL</span><i></i></div>
+      </section>
+
+      <!-- Marquee divider -->
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee__track" id="marqueeTrack"></div>
+      </div>
+
+      <!-- ===================== SERVICES ===================== -->
+      <section class="section services" id="services">
+        <div class="section__head">
+          <p class="section__eyebrow" data-reveal>WHAT WE DO</p>
+          <h2 class="section__title split" data-split>Care for every part of your smile.</h2>
+        </div>
+        <div class="services__grid" id="servicesGrid"></div>
+      </section>
+
+      <!-- ===================== CRAFT (video showcase) ===================== -->
+      <section class="section craft" id="craft">
+        <div class="craft__grid">
+          <div class="craft__media" data-reveal>
+            <div class="craft__video-wrap" id="craftVideo"></div>
+          </div>
+          <div class="craft__copy">
+            <p class="section__eyebrow" data-reveal>THE CRAFT</p>
+            <h2 class="section__title split" data-split>Precision you can feel.</h2>
+            <p class="craft__text" data-reveal>
+              Every restoration is shaped to the micron — scanned, designed and finished in-house
+              so your tooth looks, fits and feels like it was always yours.
+            </p>
+            <ul class="craft__stats" data-reveal>
+              <li><strong>3D</strong><span>Digital scanning</span></li>
+              <li><strong>&lt; 1mm</strong><span>Fit tolerance</span></li>
+              <li><strong>Same-day</strong><span>Crowns available</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== PRICING ===================== -->
+      <section class="section pricing" id="pricing">
+        <div class="section__head">
+          <p class="section__eyebrow" data-reveal>TRANSPARENT PRICING</p>
+          <h2 class="section__title split" data-split>Clear prices, no surprises.</h2>
+        </div>
+        <div class="pricing__grid" id="pricingGrid"></div>
+        <p class="pricing__note" data-reveal id="pricingNote"></p>
+      </section>
+
+      <!-- ===================== DOCTORS ===================== -->
+      <section class="section doctors" id="doctors">
+        <div class="section__head">
+          <p class="section__eyebrow" data-reveal>MEET THE TEAM</p>
+          <h2 class="section__title split" data-split>Specialists who put you at ease.</h2>
+        </div>
+        <div class="doctors__grid" id="doctorsGrid"></div>
+      </section>
+
+      <!-- ===================== STUDIO (clinic gallery) ===================== -->
+      <section class="section studio" id="studio">
+        <div class="section__head">
+          <p class="section__eyebrow" data-reveal>INSIDE LUMINA</p>
+          <h2 class="section__title split" data-split>A studio built to calm you.</h2>
+        </div>
+        <div class="studio__grid">
+          <figure class="studio__item studio__item--tall" id="studioReception" data-reveal>
+            <figcaption>The waiting lounge</figcaption>
+          </figure>
+          <figure class="studio__item" id="studioRoom" data-reveal>
+            <figcaption>Treatment suite</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ===================== REVIEWS ===================== -->
+      <section class="section reviews" id="reviews">
+        <div class="section__head">
+          <p class="section__eyebrow" data-reveal>KIND WORDS</p>
+          <h2 class="section__title split" data-split>Smiles worth talking about.</h2>
+        </div>
+        <div class="reviews__marquee" id="reviewsMarquee">
+          <div class="reviews__track" id="reviewsTrack"></div>
+        </div>
+      </section>
+
+      <!-- ===================== APPOINTMENT ===================== -->
+      <section class="section appointment" id="appointment">
+        <div class="appointment__wrap">
+          <div class="appointment__intro">
+            <p class="section__eyebrow" data-reveal>BOOK A VISIT</p>
+            <h2 class="section__title split" data-split>Let's get you smiling.</h2>
+            <p class="appointment__blurb" data-reveal>
+              Pick a time that suits you. We'll confirm over WhatsApp within the hour during working times.
+            </p>
+            <ul class="appointment__perks" data-reveal>
+              <li>No waiting-room queues — timed slots only</li>
+              <li>Free first consultation for new patients</li>
+              <li>Gentle, anxiety-friendly approach</li>
+            </ul>
+          </div>
+
+          <form class="appointment__form" id="bookingForm" novalidate>
+            <div class="field">
+              <label for="fullName">Full name</label>
+              <input type="text" id="fullName" name="fullName" required autocomplete="name" placeholder="Your name" />
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone" required autocomplete="tel" placeholder="+91 …" />
+              </div>
+              <div class="field">
+                <label for="email">Email <span class="muted">(optional)</span></label>
+                <input type="email" id="email" name="email" autocomplete="email" placeholder="you@email.com" />
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="treatment">Treatment</label>
+                <select id="treatment" name="treatment" required></select>
+              </div>
+              <div class="field">
+                <label for="doctor">Preferred doctor</label>
+                <select id="doctor" name="doctor"></select>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="date">Preferred date</label>
+                <input type="date" id="date" name="date" required />
+              </div>
+              <div class="field">
+                <label for="day">Day</label>
+                <input type="text" id="day" name="day" readonly placeholder="—" />
+              </div>
+            </div>
+            <div class="field">
+              <label>Time slot</label>
+              <div class="slots" id="slots" role="group" aria-label="Choose a time slot"></div>
+            </div>
+            <div class="field">
+              <label for="message">Message <span class="muted">(optional)</span></label>
+              <textarea id="message" name="message" rows="3" placeholder="Anything we should know?"></textarea>
+            </div>
+            <button type="submit" class="btn btn--primary btn--lg btn--block" data-magnetic data-cursor>
+              Request appointment
+            </button>
+            <p class="form-error" id="formError" role="alert"></p>
+          </form>
+
+          <!-- Success overlay -->
+          <div class="booking-success" id="bookingSuccess" aria-hidden="true">
+            <div class="booking-success__check">
+              <svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24" fill="none"/><path fill="none" d="M14 27l8 8 16-16"/></svg>
+            </div>
+            <h3>Request sent!</h3>
+            <p>Opening WhatsApp so you can confirm the details with us.</p>
+            <button class="btn btn--ghost" id="successClose" data-cursor>Book another</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== CONTACT ===================== -->
+      <section class="section contact" id="contact">
+        <div class="contact__grid">
+          <div class="contact__info">
+            <p class="section__eyebrow" data-reveal>COME SAY HELLO</p>
+            <h2 class="section__title split" data-split>Find us, call us, follow us.</h2>
+            <ul class="contact__list" id="contactList" data-reveal></ul>
+            <div class="contact__social" id="contactSocial" data-reveal></div>
+          </div>
+          <div class="contact__map" data-reveal>
+            <iframe id="mapFrame" title="Clinic location" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="footer">
+      <div class="footer__top">
+        <a href="#top" class="nav__logo" data-cursor>
+          <span class="nav__logo-mark" aria-hidden="true"></span>
+          <span class="nav__logo-text">Lumina Dental Care</span>
+        </a>
+        <nav class="footer__links" aria-label="Footer">
+          <a href="#services" data-cursor>Services</a>
+          <a href="#pricing" data-cursor>Pricing</a>
+          <a href="#doctors" data-cursor>Doctors</a>
+          <a href="#reviews" data-cursor>Reviews</a>
+          <a href="#appointment" data-cursor>Book</a>
+        </nav>
+      </div>
+      <div class="footer__bottom">
+        <span id="footerCopy"></span>
+        <span class="footer__fine">Demo website · Sample content only</span>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
