@@ -66,6 +66,33 @@ No other file needs touching to rebrand the site.
 
 ---
 
+## Deploy to Netlify
+
+The repo already includes `netlify.toml` (build command `npm run build`, publish
+dir `dist`). Two ways to go live:
+
+**A. Connect the GitHub repo (recommended)**
+1. Go to <https://app.netlify.com> → **Add new site → Import an existing project**.
+2. Choose **GitHub** and pick the `lumina-dental-care` repository.
+3. Netlify reads `netlify.toml`, so just confirm: build `npm run build`, publish `dist`.
+4. Click **Deploy**. Every push to `main` auto-deploys.
+
+**B. Netlify CLI (from your machine)**
+```bash
+npm i -g netlify-cli
+netlify login          # opens the browser to authorise
+npm run build
+netlify deploy --prod --dir=dist
+```
+
+## Media pipeline (optional, already run)
+
+Raw assets live outside the repo. To re-optimise after adding new raw files:
+```bash
+npm run media          # images → AVIF/WebP + sizes + blur; videos → MP4/WebM + posters
+node scripts/fetch-fonts.mjs   # re-download/self-host the Latin font subsets
+```
+
 ## Project structure
 
 ```
