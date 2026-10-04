@@ -19,31 +19,32 @@ export const CONFIG = {
 
   /* ---- Contact details --------------------------------------------------- */
   contact: {
-    phoneDisplay: "+91 98765 43210",
-    phoneHref: "tel:+919876543210",
+    // All sample values for this demo — replace with the real clinic details.
+    phoneDisplay: "+1 (415) 555-0137",
+    phoneHref: "tel:+14155550137",
     email: "hello@luminadental.care",
-    address: "2nd Floor, Marine Arcade, Linking Road, Bandra West, Mumbai 400050",
+    address: "1200 Marine Parkway, Suite 310, Redwood City, CA 94065, USA",
     hours: [
-      { day: "Mon – Fri", time: "9:00 AM – 8:00 PM" },
-      { day: "Saturday", time: "9:00 AM – 5:00 PM" },
+      { day: "Mon – Fri", time: "9:00 AM – 6:00 PM" },
+      { day: "Saturday", time: "9:00 AM – 2:00 PM" },
       { day: "Sunday", time: "Emergencies only" },
     ],
-    // Any sample location works — this is a demo.
-    mapEmbed:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.3!2d72.8296!3d19.0607!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c9!2sBandra%20West!5e0!3m2!1sen!2sin!4v1700000000000",
+    // Any sample location works — this is a demo (neutral US location).
+    mapEmbed: "https://www.google.com/maps?q=Redwood+City+California&output=embed",
   },
 
   /* ---- WhatsApp booking --------------------------------------------------
-     IMPORTANT: put the full number in international format, digits only,
-     no "+", no spaces. e.g. India 98765 43210 -> "919876543210"           */
-  whatsappNumber: "919876543210",
+     SAMPLE NUMBER — change this to the clinic's real WhatsApp number.
+     International format, digits only, no "+", no spaces.
+     e.g. US +1 415 555 0137 -> "14155550137"                               */
+  whatsappNumber: "14155550137",
 
   /* ---- Social links ------------------------------------------------------ */
   social: {
     instagram: "https://instagram.com",
     facebook: "https://facebook.com",
     youtube: "https://youtube.com",
-    whatsapp: "https://wa.me/919876543210",
+    whatsapp: "https://wa.me/14155550137",
     x: "https://x.com",
   },
 
@@ -61,16 +62,16 @@ export const CONFIG = {
 
   /* ---- Treatment prices (at least 8). Realistic sample prices. ---------- */
   prices: [
-    { name: "Check-up & Cleaning", price: "₹1,200" },
-    { name: "Teeth Whitening", price: "₹8,500" },
-    { name: "Dental Filling", price: "₹2,000" },
-    { name: "Root Canal", price: "₹6,500" },
-    { name: "Dental Crown", price: "₹9,000" },
-    { name: "Dental Implant", price: "₹35,000" },
-    { name: "Braces (metal)", price: "₹45,000" },
-    { name: "Clear Aligners", price: "₹1,10,000" },
-    { name: "Wisdom Tooth Removal", price: "₹7,500" },
-    { name: "Kids Dentistry", price: "₹1,500" },
+    { name: "Check-up & Cleaning", price: "$120" },
+    { name: "Teeth Whitening", price: "$450" },
+    { name: "Dental Filling", price: "$180" },
+    { name: "Root Canal", price: "$900" },
+    { name: "Dental Crown", price: "$1,200" },
+    { name: "Dental Implant", price: "$3,500" },
+    { name: "Braces (metal)", price: "$5,000" },
+    { name: "Clear Aligners", price: "$4,500" },
+    { name: "Wisdom Tooth Removal", price: "$400" },
+    { name: "Kids Dentistry", price: "$90" },
   ],
   pricesNote: "Prices are indicative. Final cost is confirmed after the consultation.",
 
@@ -78,20 +79,19 @@ export const CONFIG = {
   doctors: [
     // photoKey = a key in src/assets-manifest.json (optimised portrait). Leave
     // empty to show the elegant initials avatar instead.
-    { name: "Dr. Aarav Mehta", speciality: "Implantologist", qualification: "BDS, MDS (Prosthodontics)", experience: "14 years", photoKey: "doctor-aarav" },
-    { name: "Dr. Nisha Kapoor", speciality: "Orthodontist", qualification: "BDS, MDS (Orthodontics)", experience: "11 years", photoKey: "" },
-    { name: "Dr. Rohan Verma", speciality: "Endodontist", qualification: "BDS, MDS (Endodontics)", experience: "9 years", photoKey: "" },
-    { name: "Dr. Sara Pinto", speciality: "Pediatric Dentist", qualification: "BDS, MDS (Pedodontics)", experience: "8 years", photoKey: "" },
+    { name: "Dr. James Whitaker", speciality: "Implantologist", qualification: "DDS, Prosthodontics", experience: "14 years", photoKey: "doctor-james" },
+    { name: "Dr. Emily Carter", speciality: "Orthodontist", qualification: "DDS, MS Orthodontics", experience: "11 years", photoKey: "doctor-emily" },
+    { name: "Dr. Sophia Bennett", speciality: "Pediatric Dentist", qualification: "DDS, Pediatric Dentistry", experience: "12 years", photoKey: "doctor-sophia" },
   ],
 
   /* ---- Reviews ----------------------------------------------------------- */
   reviews: [
-    { name: "Priya S.", stars: 5, text: "I used to dread the dentist. Lumina changed that completely — calm, painless, and genuinely kind." },
-    { name: "Karan D.", stars: 5, text: "Got my implant done here. The precision and aftercare were on another level. Zero complaints." },
-    { name: "Meera J.", stars: 5, text: "My kids actually ask to go back. The pediatric team is magic with nervous little ones." },
-    { name: "Aditya R.", stars: 4, text: "Whitening results were fantastic and the studio feels more like a spa than a clinic." },
-    { name: "Fatima N.", stars: 5, text: "Booked an emergency slot on a Sunday and was seen within the hour. Lifesavers." },
-    { name: "Vikram T.", stars: 5, text: "Clear aligners sorted in 9 months. Honest pricing, no upsell, brilliant results." },
+    { name: "Emma R.", stars: 5, text: "I used to dread the dentist. Lumina changed that completely — calm, painless, and genuinely kind." },
+    { name: "Daniel K.", stars: 5, text: "Got my implant done here. The precision and aftercare were on another level. Zero complaints." },
+    { name: "Olivia M.", stars: 5, text: "My kids actually ask to go back. The pediatric team is magic with nervous little ones." },
+    { name: "Michael T.", stars: 4, text: "Whitening results were fantastic and the studio feels more like a spa than a clinic." },
+    { name: "Grace L.", stars: 5, text: "Booked an emergency slot on a weekend and was seen within the hour. Lifesavers." },
+    { name: "Ethan W.", stars: 5, text: "Clear aligners sorted in 9 months. Honest pricing, no upsell, brilliant results." },
   ],
 
   /* ---- Appointment form options ----------------------------------------- */

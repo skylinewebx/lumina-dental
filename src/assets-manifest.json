@@ -30,13 +30,29 @@
       "ratio": 1.3393,
       "lqip": "data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAAAwBQCdASoYABIAPu1kq1AppSOisBgIATAdiWcAACnciSBoxClkgZOaDpcjaO5VKNG3QAD99wS/39lCOXKHyVpsMxBHpQXoLHHnX2K0rPJhlQEPOvEdcQqK/hVkgiyEn0C5Kt17fmupXiRCTlqkp+NJafL3huaIyRQFAAAA"
     },
-    "doctor-aarav": {
+    "doctor-emily": {
       "widths": [
         400,
         800
       ],
       "ratio": 1,
-      "lqip": "data:image/webp;base64,UklGRsIAAABXRUJQVlA4ILYAAAAwBQCdASoYABgAPu1mq06ppaQiKA1RMB2JQBfJMYOOFqP+jNto5QJgnr9I+/1o2+AAWAD+7oWnd0A8b1DQuotjTTpqav6pesMujoN3EXEqHqGanUMorFGer6xnfj5ssfGSFoytUcZ/MOW/guDvUxMuUGwAdacHZrgkj/W8cRLMwInwxf6ahv/SKMEySAgReOyvXVySNnU//Q4eBz6LICOrTX4nYHmb0ouwP/vwG3SsqZepKkAAAA=="
+      "lqip": "data:image/webp;base64,UklGRsQAAABXRUJQVlA4ILgAAAAwBQCdASoYABgAPu1crE2ppKSiMBgMATAdiUAWHbGOzfq7Cuhv17zb2+hcyvRtkjp28AD+7oWne9VDfk0ld44fzE7I4ehyqdRaZ2Jzf5qBhrbxURJdA1fQ/4u+tuALrrqIGNDkrcSCMvE7WJ+IodDr6bFVMXco9OWP1kk0MrXUyyHSsX105n7jC8JgmjqU+wVhOtkFuLAEkUUBdaoCCxKFvszxeT9KJDmUqfnwdQ3qwbbuZeLWCwAA"
+    },
+    "doctor-james": {
+      "widths": [
+        400,
+        800
+      ],
+      "ratio": 1,
+      "lqip": "data:image/webp;base64,UklGRtQAAABXRUJQVlA4IMgAAACwBQCdASoYABgAPu1oqk8ppiOiMBgIATAdiWQAuwAQ8AL/DrQHosu7Drbqtaod8TE2TvYxMoAA/u6E5DQPNiT/ChZOzzzJiA/0dyBXCyKPWmfHChqjPhnzkiSq5MoGM3zMuf64TTFYrS8y0g4JT+CRSeR0705GHvnE21BBMq0bjdFVc08Am9nR7q61b3JMTZfOhFmem2SPRdCI0iJ8J8LQjJiH1xX58K5miBj17+F6V9z+5z6+K+SXFzHOg8tVkNVfJCKFMFwAAA=="
+    },
+    "doctor-sophia": {
+      "widths": [
+        400,
+        800
+      ],
+      "ratio": 1,
+      "lqip": "data:image/webp;base64,UklGRrYAAABXRUJQVlA4IKoAAAAwBQCdASoYABgAPu1ip02ppaOiMAgBMB2JQBOgO4Aeh9aXxYt9CTQ9kfH9/BR7cI8wgAD+69ub7e7TFSfOlfmPOXQHj3OfBRoaZDMNzvtp31I/DpjWQia6pBsZq9SM3TiHlWNs3Bi/V+b5SBfCGz08dtXmPv8w5llFHqx5esbCebcfzPA+gknQYA8XpAAq02M7QxJ9sA1MRn2xlsAszvDibb5VaLrrFEAAAA=="
     }
   },
   "videos": {

@@ -73,7 +73,7 @@ dir `dist`). Two ways to go live:
 
 **A. Connect the GitHub repo (recommended)**
 1. Go to <https://app.netlify.com> → **Add new site → Import an existing project**.
-2. Choose **GitHub** and pick the `lumina-dental-care` repository.
+2. Choose **GitHub** and pick the `lumina-dental` repository.
 3. Netlify reads `netlify.toml`, so just confirm: build `npm run build`, publish `dist`.
 4. Click **Deploy**. Every push to `main` auto-deploys.
 

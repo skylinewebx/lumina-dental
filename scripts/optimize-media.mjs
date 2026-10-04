@@ -18,8 +18,9 @@ const ffmpeg = (await import("@ffmpeg-installer/ffmpeg")).default.path;
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 
-// Raw source folder (sits next to the project in Downloads).
+// Raw source folders (sit next to the project in Downloads).
 const SRC = resolve(ROOT, "..", "Lumina Dental");
+const IMAGES = resolve(ROOT, "..", "images"); // extra images (doctor photos)
 const IMG_OUT = resolve(ROOT, "public/assets/images");
 const VID_OUT = resolve(ROOT, "public/assets/videos");
 mkdirSync(IMG_OUT, { recursive: true });
@@ -29,8 +30,8 @@ const IMG_WIDTHS = [480, 800, 1200, 1800];
 const manifest = { images: {}, videos: {} };
 
 /* ---- Images -------------------------------------------------------------- */
-async function processImage(srcFile, name, { widths = IMG_WIDTHS, square = false } = {}) {
-  const input = resolve(SRC, srcFile);
+async function processImage(srcFile, name, { widths = IMG_WIDTHS, square = false, srcDir = SRC } = {}) {
+  const input = resolve(srcDir, srcFile);
   if (!existsSync(input)) { console.warn("! missing", srcFile); return; }
 
   const meta = await sharp(input).metadata();
@@ -98,7 +99,11 @@ console.log("Optimising media from:", SRC, "\n");
 await processImage("IMAGE A.jpg", "hero-tooth");                 // hero poster / LCP
 await processImage("IMAGE B (2).jpg", "clinic-reception");       // studio gallery
 await processImage("IMAGE C (2).jpg", "clinic-room");            // studio gallery
-await processImage("IMAGE D.jpg", "doctor-aarav", { square: true, widths: [400, 800] });
+// Doctor portraits (from the "images" folder) — square crops.
+const DOC = { square: true, widths: [400, 800], srcDir: IMAGES };
+await processImage("Dr. Nisha Kapoor.jpg", "doctor-emily", DOC);   // Dr. Emily Carter
+await processImage("Dr. Rohan Verma.jpg", "doctor-james", DOC);    // Dr. James Whitaker
+await processImage("Dr. Sara Pinto.jpg", "doctor-sophia", DOC);    // Dr. Sophia Bennett
 await processVideo("VIDEO E.mp4", "hero-bg");                    // hero ambient loop
 await processVideo("VIDEO F.mp4", "tooth-spin");                 // craft showcase
 
