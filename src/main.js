@@ -5,18 +5,31 @@
    ========================================================================== */
 import "./fonts.css";
 import "./style.css";
-import { renderContent } from "./modules/content.js";
+import { renderContent, renderSections } from "./modules/content.js";
 import { initTheme } from "./modules/theme.js";
-import { initScroll } from "./modules/scroll.js";
-import { initCursor } from "./modules/cursor.js";
 import { initForm } from "./modules/form.js";
 
 function boot() {
-  renderContent();   // build data-driven sections from config
+  renderContent();   // LIGHT above-the-fold essentials (hero, nav, footer)
   initTheme();       // light/dark + remembered choice
   initForm();        // appointment form + WhatsApp
-  initCursor();      // custom cursor + magnetic buttons
-  initScroll();      // Lenis smooth scroll + GSAP reveals
+
+  // Everything below the fold is built on idle, AFTER first paint, so the heavy
+  // DOM work never delays LCP/TTI. Then the reveal engine (all devices) and the
+  // desktop-only enhancement (Lenis + magnetic cursor) start.
+  const buildAndEnhance = () => {
+    renderSections(); // services, pricing, doctors, reviews, studio, contact…
+    import("./modules/reveal-lite.js")
+      .then((m) => m.initReveals())
+      .catch(() => document.documentElement.classList.remove("anim")); // never hide text
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      import("./modules/enhance-desktop.js").then((m) => m.initDesktopEnhance()).catch(() => {});
+    }
+  };
+  const schedule = () =>
+    "requestIdleCallback" in window ? requestIdleCallback(buildAndEnhance, { timeout: 1600 }) : setTimeout(buildAndEnhance, 200);
+  if (document.readyState === "complete") schedule();
+  else window.addEventListener("load", schedule, { once: true });
 
   // Defer the heavy 3D (three.js) so page text/layout paint first. The instant
   // hero poster stays until the live tooth is ready, then crossfades in.
@@ -39,6 +52,15 @@ function boot() {
   // Hero headline word reveal (runs after content render).
   revealHero();
 
+  // Reveal the hero's above-the-fold content immediately (don't wait for the
+  // deferred reveal engine) using the same .is-in class, staggered.
+  if (document.documentElement.classList.contains("anim")) {
+    document.querySelectorAll(".hero [data-reveal]").forEach((el, i) => {
+      el.style.transitionDelay = `${0.15 + i * 0.12}s`;
+      requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("is-in")));
+    });
+  }
+
   // Navbar scrolled state + mobile menu.
   initNav();
 
@@ -56,7 +78,13 @@ function boot() {
       if (inView(h)) h.querySelectorAll(".line > span").forEach((s) => (s.style.transform = "translateY(0)"));
     });
   };
-  window.addEventListener("load", () => setTimeout(sweep, 2500));
+  window.addEventListener("load", () =>
+    setTimeout(() => {
+      // If the reveal engine never loaded, un-hide everything so no text is lost.
+      if (!window.__revealsReady) document.documentElement.classList.remove("anim");
+      sweep();
+    }, 3000)
+  );
 }
 
 function revealHero() {

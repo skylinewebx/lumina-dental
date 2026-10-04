@@ -6,6 +6,10 @@
     <meta name="description" content="Lumina Dental Care — a calm, modern dental clinic. Gentle, precise care with advanced technology." />
     <title>Lumina Dental Care — Dentistry that feels like light</title>
 
+    <!-- Enable entrance animations up front (before paint) so reveal states are
+         set from the first frame — the reveal engine then loads after paint. -->
+    <script>document.documentElement.classList.add("anim");</script>
+
     <!-- Preload the hero image (LCP) responsively, AVIF with WebP intent -->
     <link rel="preload" as="image" type="image/avif" fetchpriority="high"
           imagesrcset="/assets/images/hero-tooth-800.avif 800w, /assets/images/hero-tooth-1200.avif 1200w, /assets/images/hero-tooth-1800.avif 1800w"

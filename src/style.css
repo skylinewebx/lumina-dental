@@ -442,6 +442,7 @@ html.anim .service-card.is-in:hover {
 html.anim [data-reveal] { opacity: 0; transform: translateY(26px); }
 html.anim [data-reveal].is-in { opacity: 1; transform: none; }
 
+
 /* Same gated pattern for the directional card reveals (text stays visible if
    animation never runs). --ex/--ey set the entrance direction per card. */
 html.anim .service-card { opacity: 0; transform: translate(var(--ex, 0px), var(--ey, 50px)); }
@@ -466,7 +467,7 @@ html.anim .doctor-card.is-in { opacity: 1; transform: none; }
   width: 100%; height: 100%; pointer-events: none;
 }
 .hero__poster img {
-  width: 100%; height: 100%; object-fit: cover; object-position: 72% 45%;
+  width: 100%; height: 100%; object-fit: cover; object-position: 82% 45%;
   opacity: .96; transition: opacity 1s var(--ease);
 }
 .hero.is-3d-ready .hero__poster img { opacity: 0; }

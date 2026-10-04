@@ -29,11 +29,12 @@ const svg = (inner) =>
   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
 
 export function renderContent() {
-  const { clinic, contact, social, services, prices, pricesNote, doctors, reviews } = CONFIG;
+  // LIGHT, above-the-fold essentials only — runs before first paint.
+  const { clinic } = CONFIG;
 
-  /* ---- Hero headline: word-by-word reveal ---- */
+  // Hero headline/sub are in static HTML already; only build if missing.
   const titleEl = document.getElementById("heroTitle");
-  if (titleEl) {
+  if (titleEl && !titleEl.querySelector(".word")) {
     titleEl.innerHTML = clinic.heroWords
       .map((w, i) => {
         const accent = i === clinic.heroWords.length - 1 ? " accent" : "";
@@ -41,7 +42,24 @@ export function renderContent() {
       })
       .join(" ");
   }
-  document.querySelector(".hero__sub").textContent = clinic.heroSub;
+  const subEl = document.querySelector(".hero__sub");
+  if (subEl && !subEl.textContent.trim()) subEl.textContent = clinic.heroSub;
+
+  // Brand text + footer copy.
+  document.querySelectorAll(".nav__logo-text").forEach((el, i) => {
+    el.textContent = i === 0 ? clinic.name.split(" ")[0] : clinic.name;
+  });
+  const fc = document.getElementById("footerCopy");
+  if (fc) fc.textContent = `© ${new Date().getFullYear()} ${clinic.name}. All rights reserved.`;
+
+  // Hero ambient bokeh video element (bytes load lazily, after paint).
+  const heroBg = document.getElementById("heroBg");
+  if (heroBg) heroBg.innerHTML = lazyVideo("hero-bg", { className: "hero__bg-video" });
+}
+
+/* Heavy, below-the-fold sections — built after first paint / on idle. */
+export function renderSections() {
+  const { contact, social, services, prices, pricesNote, doctors, reviews } = CONFIG;
 
   /* ---- Marquee ---- */
   const track = document.getElementById("marqueeTrack");
@@ -146,19 +164,7 @@ export function renderContent() {
   const map = document.getElementById("mapFrame");
   if (map) map.src = contact.mapEmbed;
 
-  /* ---- Footer ---- */
-  const fc = document.getElementById("footerCopy");
-  if (fc) fc.textContent = `© ${new Date().getFullYear()} ${clinic.name}. All rights reserved.`;
-
-  // Update document title / brand text from config.
-  document.querySelectorAll(".nav__logo-text").forEach((el, i) => {
-    el.textContent = i === 0 ? clinic.name.split(" ")[0] : clinic.name;
-  });
-
-  /* ---- Media: hero ambient video, craft showcase, studio gallery ---- */
-  const heroBg = document.getElementById("heroBg");
-  if (heroBg) heroBg.innerHTML = lazyVideo("hero-bg", { className: "hero__bg-video" });
-
+  /* ---- Media: craft showcase + studio gallery (hero video set earlier) ---- */
   const craftVideo = document.getElementById("craftVideo");
   if (craftVideo) craftVideo.innerHTML = lazyVideo("tooth-spin", { className: "craft__video" });
 
