@@ -84,17 +84,41 @@ export function renderSections() {
       .join("");
   }
 
-  /* ---- Pricing ---- */
+  /* ---- Pricing accordion (click to expand) ---- */
+  const chev = `<svg class="price-row__chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>`;
   const pg = document.getElementById("pricingGrid");
   if (pg) {
     pg.innerHTML = prices
-      .map(
-        (p) => `
-      <div class="price-row" data-cursor>
-        <span class="price-row__name">${p.name}</span>
-        <span class="price-row__price">${p.price}</span>
-      </div>`
-      )
+      .map((p, i) => {
+        const open = i === 0; // first row open by default
+        return `
+      <div class="price-item${open ? " is-open" : ""}" data-acc>
+        <button class="price-row" id="accbtn-${i}" aria-expanded="${open}" aria-controls="acc-${i}" data-cursor>
+          <span class="price-row__sweep" aria-hidden="true"></span>
+          <span class="price-row__name">${p.name}</span>
+          <span class="price-row__right">
+            <span class="price-row__price">from ${p.price}</span>
+            ${chev}
+          </span>
+        </button>
+        <div class="price-panel" id="acc-${i}" role="region" aria-labelledby="accbtn-${i}">
+          <div class="price-panel__inner">
+            <div class="price-panel__meta">
+              <div><span class="k">Price</span><span class="v">${p.range}</span></div>
+              <div><span class="k">Duration</span><span class="v">${p.duration}</span></div>
+              <div><span class="k">Visits</span><span class="v">${p.visits}</span></div>
+              <div><span class="k">Aftercare</span><span class="v">${p.aftercare}</span></div>
+            </div>
+            <ul class="price-panel__includes">
+              ${p.includes.map((x) => `<li>${x}</li>`).join("")}
+            </ul>
+            <button class="btn btn--primary price-panel__book" data-treatment="${p.name}" data-magnetic data-cursor>
+              Book this treatment
+            </button>
+          </div>
+        </div>
+      </div>`;
+      })
       .join("");
   }
   const note = document.getElementById("pricingNote");
@@ -113,7 +137,7 @@ export function renderSections() {
       <article class="doctor-card" data-tilt data-cursor>
         <div class="doctor-card__avatar">${avatar}</div>
         <h3>${d.name}</h3>
-        <p class="doctor-card__spec">${d.speciality}</p>
+        <p class="doctor-card__spec"><span>${d.speciality}</span></p>
         <div class="doctor-card__meta">
           <span>${d.qualification}</span>
           <span>${d.experience} experience</span>
@@ -124,23 +148,57 @@ export function renderSections() {
     initTilt();
   }
 
-  /* ---- Reviews (duplicated track for seamless marquee) ---- */
-  const rt = document.getElementById("reviewsTrack");
-  if (rt) {
-    const cardHtml = (r) => {
-      const stars = Array.from({ length: 5 }, (_, i) =>
-        i < r.stars ? "★" : '<span class="off">★</span>'
-      ).join("");
-      return `
+  /* ---- Stats band (odometer + ring; animated by effects.js on reveal) ---- */
+  const statsBand = document.getElementById("statsBand");
+  if (statsBand && CONFIG.stats) {
+    statsBand.innerHTML = CONFIG.stats
+      .map(
+        (s) => `
+      <div class="stat" data-reveal>
+        <svg class="stat__ring" viewBox="0 0 72 72" aria-hidden="true">
+          <circle class="stat__ring-bg" cx="36" cy="36" r="32"/>
+          <circle class="stat__ring-fill" cx="36" cy="36" r="32"/>
+        </svg>
+        <div class="stat__num">
+          <span class="stat__value" data-to="${s.value}" data-decimals="${s.decimals || 0}">0</span><span class="stat__suffix">${s.suffix || ""}</span>
+        </div>
+        <span class="stat__label">${s.label}</span>
+      </div>`
+      )
+      .join("");
+  }
+
+  /* ---- Reviews: two rows (built in effects.js marquee) ---- */
+  const starRow = (n) =>
+    Array.from({ length: 5 }, (_, i) => (i < n ? '<span class="star">★</span>' : '<span class="star off">★</span>')).join("");
+  const cardHtml = (r) => `
       <article class="review-card">
-        <div class="review-card__stars">${stars}</div>
+        <div class="review-card__stars" data-stars="${r.stars}">${starRow(r.stars)}</div>
         <p>“${r.text}”</p>
         <div class="review-card__name">— ${r.name}</div>
       </article>`;
-    };
-    const all = reviews.map(cardHtml).join("");
-    rt.innerHTML = all + all;
-    initReviewMarquee(rt);
+  const half = Math.ceil(reviews.length / 2);
+  const rowA = reviews.slice(0, half).map(cardHtml).join("");
+  const rowB = reviews.slice(half).concat(reviews.slice(0, half)).map(cardHtml).join("");
+  const rtA = document.getElementById("reviewsTrackA");
+  const rtB = document.getElementById("reviewsTrackB");
+  if (rtA) rtA.innerHTML = rowA + rowA;
+  if (rtB) rtB.innerHTML = rowB + rowB;
+
+  /* ---- How it works steps ---- */
+  const howtoSteps = document.getElementById("howtoSteps");
+  if (howtoSteps && CONFIG.howItWorks) {
+    howtoSteps.innerHTML = CONFIG.howItWorks
+      .map(
+        (s) => `
+      <div class="howto__step" data-reveal>
+        <span class="howto__dot" aria-hidden="true"></span>
+        <span class="howto__num">${s.step}</span>
+        <h3>${s.title}</h3>
+        <p>${s.desc}</p>
+      </div>`
+      )
+      .join("");
   }
 
   /* ---- Contact ---- */
@@ -198,21 +256,3 @@ function initTilt() {
   });
 }
 
-/* Slow auto-scrolling reviews marquee using rAF (transform only). */
-function initReviewMarquee(track) {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  let x = 0;
-  let paused = false;
-  const half = () => track.scrollWidth / 2;
-  track.parentElement.addEventListener("pointerenter", () => (paused = true));
-  track.parentElement.addEventListener("pointerleave", () => (paused = false));
-  function step() {
-    if (!paused) {
-      x -= 0.4; // slow
-      if (Math.abs(x) >= half()) x = 0;
-      track.style.transform = `translateX(${x}px)`;
-    }
-    requestAnimationFrame(step);
-  }
-  step();
-}

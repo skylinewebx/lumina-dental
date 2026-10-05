@@ -61,21 +61,78 @@ export const CONFIG = {
   ],
 
   /* ---- Treatment prices (at least 8). Realistic sample prices. ---------- */
+  // Each treatment expands into an accordion. `price` is the "from" figure;
+  // `range` is the fuller range; edit everything here in one place.
   prices: [
-    { name: "Check-up & Cleaning", price: "$120" },
-    { name: "Teeth Whitening", price: "$450" },
-    { name: "Dental Filling", price: "$180" },
-    { name: "Root Canal", price: "$900" },
-    { name: "Dental Crown", price: "$1,200" },
-    { name: "Dental Implant", price: "$3,500" },
-    { name: "Braces (metal)", price: "$5,000" },
-    { name: "Clear Aligners", price: "$4,500" },
-    { name: "Wisdom Tooth Removal", price: "$400" },
-    { name: "Kids Dentistry", price: "$90" },
+    {
+      name: "Check-up & Cleaning", price: "$120", range: "$120 – $180",
+      includes: ["Full oral exam", "Professional scale & polish", "Digital X-rays if needed", "Personalised home-care plan"],
+      duration: "45 minutes", visits: "1 visit", aftercare: "Next recall in 6 months",
+    },
+    {
+      name: "Teeth Whitening", price: "$450", range: "$450 – $650",
+      includes: ["In-chair whitening session", "Custom-fit take-home trays", "Shade assessment", "Sensitivity care kit"],
+      duration: "60–90 minutes", visits: "1–2 visits", aftercare: "Results last 12–24 months with care",
+    },
+    {
+      name: "Dental Filling", price: "$180", range: "$180 – $320",
+      includes: ["Tooth-coloured composite", "Decay removal", "Bite adjustment & polish"],
+      duration: "30–45 minutes", visits: "1 visit", aftercare: "2-year workmanship warranty",
+    },
+    {
+      name: "Root Canal", price: "$900", range: "$900 – $1,400",
+      includes: ["Rotary endodontic treatment", "Local anaesthesia", "Temporary filling", "Crown recommendation"],
+      duration: "60–90 minutes", visits: "1–2 visits", aftercare: "Crown advised within 4 weeks",
+    },
+    {
+      name: "Dental Crown", price: "$1,200", range: "$1,200 – $1,800",
+      includes: ["Digital 3D scan", "In-house milled ceramic crown", "Shade matching", "Fit & bite check"],
+      duration: "1–2 hours", visits: "1–2 visits", aftercare: "5-year warranty on the crown",
+    },
+    {
+      name: "Dental Implant", price: "$3,500", range: "$3,500 – $5,000",
+      includes: ["Titanium implant placement", "Abutment & ceramic crown", "Guided 3D planning", "All follow-up reviews"],
+      duration: "Staged over 3–6 months", visits: "3–4 visits", aftercare: "Lifetime implant guarantee*",
+    },
+    {
+      name: "Braces (metal)", price: "$5,000", range: "$5,000 – $6,500",
+      includes: ["Full fixed braces", "Monthly adjustments", "Retainers at completion", "Progress scans"],
+      duration: "12–24 months", visits: "Monthly check-ins", aftercare: "Retainer & 6-month review",
+    },
+    {
+      name: "Clear Aligners", price: "$4,500", range: "$4,500 – $6,000",
+      includes: ["Full set of custom aligners", "3D treatment preview", "Refinements included", "Whitening on completion"],
+      duration: "6–18 months", visits: "Every 6–8 weeks", aftercare: "Retainers & smile review",
+    },
+    {
+      name: "Wisdom Tooth Removal", price: "$400", range: "$400 – $700 per tooth",
+      includes: ["Surgical extraction", "Local or IV sedation", "Post-op care kit", "Follow-up review"],
+      duration: "30–60 minutes", visits: "1 visit", aftercare: "7–10 day recovery, review included",
+    },
+    {
+      name: "Kids Dentistry", price: "$90", range: "$90 – $160",
+      includes: ["Gentle child exam", "Clean & fluoride", "Sealants if needed", "Fun, anxiety-free approach"],
+      duration: "30 minutes", visits: "1 visit", aftercare: "6-month recall & tips",
+    },
   ],
   pricesNote: "Prices are indicative. Final cost is confirmed after the consultation.",
 
-  /* ---- Doctors (4) ------------------------------------------------------- */
+  /* ---- "How it works" steps --------------------------------------------- */
+  howItWorks: [
+    { step: "01", title: "Book", desc: "Pick a time online or over WhatsApp — no queues, no waiting rooms." },
+    { step: "02", title: "Visit", desc: "Relax in the studio while we scan, plan and talk you through everything." },
+    { step: "03", title: "Smile", desc: "Leave with a plan that fits your life — and a smile you'll want to show off." },
+  ],
+
+  /* ---- Animated stats band (on Reviews) --------------------------------- */
+  stats: [
+    { value: 12000, suffix: "+", label: "Smiles cared for" },
+    { value: 4.9, decimals: 1, suffix: "★", label: "Average rating" },
+    { value: 15, suffix: " yrs", label: "Of gentle care" },
+    { value: 98, suffix: "%", label: "Would recommend" },
+  ],
+
+  /* ---- Doctors (3) ------------------------------------------------------- */
   doctors: [
     // photoKey = a key in src/assets-manifest.json (optimised portrait). Leave
     // empty to show the elegant initials avatar instead.

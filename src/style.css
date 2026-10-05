@@ -285,27 +285,58 @@ html.anim .service-card.is-in:hover {
 .service-card h3 { font-size: 1.35rem; margin-bottom: 10px; }
 .service-card p { color: var(--text-dim); font-size: .95rem; margin: 0; }
 
-/* ---- Pricing ------------------------------------------------------------ */
-.pricing__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+/* ---- Pricing accordion -------------------------------------------------- */
+.pricing__grid { display: grid; gap: 12px; max-width: 820px; margin: 0 auto; }
+.price-item {
+  border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border);
+  overflow: hidden; will-change: transform, opacity;
+  transition: transform .45s var(--ease), border-color .4s, box-shadow .4s, background .4s, opacity .6s var(--ease);
+}
+.price-item.is-open { border-color: color-mix(in oklab, var(--teal) 50%, var(--border)); background: var(--surface-2); }
+/* The clickable header row */
 .price-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 22px 26px; border-radius: var(--radius);
-  background: var(--surface); border: 1px solid var(--border);
-  will-change: transform, opacity;
-  transition: transform .45s var(--ease), background .45s var(--ease),
-              color .45s var(--ease), border-color .45s var(--ease),
-              box-shadow .45s var(--ease), opacity .6s var(--ease);
+  position: relative; overflow: hidden; width: 100%; min-height: 60px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 20px 24px; background: transparent; border: 0; color: var(--text);
+  text-align: left; font: inherit; cursor: pointer;
+  transition: background .4s var(--ease), color .4s var(--ease);
 }
 .price-row__name { font-size: 1.08rem; font-weight: 300; }
-.price-row__price { font-family: "Fraunces", serif; font-size: 1.25rem; color: var(--text-faint); transition: color .45s var(--ease), transform .45s var(--ease); }
-.price-row:hover {
-  background: var(--teal); border-color: var(--teal); color: #042a27;
-  transform: translateY(-4px) scale(1.015); box-shadow: 0 24px 60px -22px var(--glow);
+.price-row__right { display: flex; align-items: center; gap: 14px; }
+.price-row__price {
+  font-family: "Fraunces", serif; font-size: 1.2rem; color: var(--text-faint); white-space: nowrap;
+  transition: color .4s var(--ease), transform .4s var(--ease);
 }
-.price-row:hover .price-row__price { color: #042a27; font-weight: 400; transform: scale(1.08); }
-.pricing__note {
-  margin: 34px 0 0; color: var(--text-faint); font-size: .9rem; font-style: italic;
-  text-align: center;
+.price-row__chev { width: 18px; height: 18px; color: var(--text-dim); transition: transform .45s var(--ease), color .4s; flex: 0 0 auto; }
+.price-item.is-open .price-row__chev { transform: rotate(180deg); color: var(--teal); }
+/* Glow line sweeping across on hover */
+.price-row__sweep {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  background: linear-gradient(100deg, transparent 20%, color-mix(in oklab, var(--teal) 45%, transparent) 50%, transparent 80%);
+  transform: translateX(-100%);
+}
+.price-row:hover .price-row__sweep { opacity: 1; animation: priceSweep 1s var(--ease); }
+@keyframes priceSweep { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+/* Hover light-up (dim price → bright) */
+.price-row:hover { background: var(--teal); color: #042a27; }
+.price-row:hover .price-row__price { color: #042a27; transform: scale(1.06); }
+.price-row:hover .price-row__chev { color: #042a27; }
+
+/* Expanding panel — animates grid-template-rows 0fr → 1fr (no height jank) */
+.price-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s var(--ease); }
+.price-item.is-open .price-panel { grid-template-rows: 1fr; }
+.price-panel__inner { overflow: hidden; opacity: 0; transform: translateY(8px); transition: opacity .5s var(--ease) .05s, transform .5s var(--ease) .05s; }
+.price-item.is-open .price-panel__inner { opacity: 1; transform: none; }
+.price-panel__meta { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 24px; padding: 4px 24px 18px; }
+.price-panel__meta .k { display: block; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--teal); margin-bottom: 3px; }
+.price-panel__meta .v { font-size: .98rem; color: var(--text); }
+.price-panel__includes { list-style: none; margin: 0; padding: 0 24px 18px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 24px; }
+.price-panel__includes li { position: relative; padding-left: 24px; color: var(--text-dim); font-size: .92rem; }
+.price-panel__includes li::before { content: ""; position: absolute; left: 2px; top: .45em; width: 11px; height: 6px; border-left: 1.5px solid var(--teal); border-bottom: 1.5px solid var(--teal); transform: rotate(-45deg); }
+.price-panel__book { margin: 0 24px 22px; }
+.pricing__note { margin: 30px 0 0; color: var(--text-faint); font-size: .9rem; font-style: italic; text-align: center; }
+@media (max-width: 560px) {
+  .price-panel__meta, .price-panel__includes { grid-template-columns: 1fr; }
 }
 
 /* ---- Doctors ------------------------------------------------------------ */
@@ -447,9 +478,8 @@ html.anim [data-reveal].is-in { opacity: 1; transform: none; }
    animation never runs). --ex/--ey set the entrance direction per card. */
 html.anim .service-card { opacity: 0; transform: translate(var(--ex, 0px), var(--ey, 50px)); }
 html.anim .service-card.is-in { opacity: 1; transform: none; }
-html.anim .price-row { opacity: 0; transform: translateY(40px); }
-html.anim .price-row.is-in { opacity: 1; transform: none; }
-html.anim .price-row.is-in:hover { transform: translateY(-4px) scale(1.015); } /* keep hover after reveal */
+html.anim .price-item { opacity: 0; transform: translateY(40px); }
+html.anim .price-item.is-in { opacity: 1; transform: none; }
 html.anim .doctor-card { opacity: 0; transform: translateY(50px); }
 html.anim .doctor-card.is-in { opacity: 1; transform: none; }
 
@@ -523,7 +553,134 @@ img.blur-up.is-loaded { filter: none; transform: none; }
 /* Doctor photo fills the circular avatar. */
 .doctor-card__avatar .doctor-photo,
 .doctor-card__avatar .doctor-photo img { width: 100%; height: 100%; }
-.doctor-card__avatar .doctor-photo img { object-fit: cover; }
+.doctor-card__avatar .doctor-photo img { object-fit: cover; transition: transform .2s linear; }
+
+/* =============================================================================
+   PREMIUM SECTION UPGRADES
+   ========================================================================== */
+
+/* ---- Background glow orbs (parallax + drift) --------------------------- */
+.orbs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.orb {
+  position: absolute; border-radius: 50%; filter: blur(70px); opacity: .5;
+  background: radial-gradient(circle at 50% 50%, var(--glow), transparent 70%);
+  will-change: transform; animation: orbDrift 22s var(--ease) infinite alternate;
+}
+.orb--1 { width: 46vw; height: 46vw; top: 8%; left: -8%; }
+.orb--2 { width: 38vw; height: 38vw; top: 48%; right: -10%; animation-duration: 28s; opacity: .4; }
+.orb--3 { width: 30vw; height: 30vw; top: 120%; left: 30%; animation-duration: 25s; }
+@keyframes orbDrift { from { transform: translate(0,0) scale(1); } to { transform: translate(4vw,-3vw) scale(1.12); } }
+/* Adaptive quality: soften/cheapen under load or on phones. */
+html.q-med .orb { filter: blur(54px); opacity: .38; }
+html.q-low .orb { filter: blur(40px); opacity: .28; animation: none; }
+html.q-low .hero__bg-video { opacity: .3 !important; }
+/* Keep content above the orbs (nav stays fixed with its own z-index). */
+main, .footer { position: relative; z-index: 1; }
+
+/* ---- Services: moving light spot + self-drawing icons ------------------ */
+.service-card { position: relative; transform-style: preserve-3d; }
+.service-card::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  opacity: 0; transition: opacity .4s var(--ease);
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), color-mix(in oklab, var(--teal) 22%, transparent), transparent 60%);
+}
+.service-card:hover::after { opacity: 1; }
+html.anim .service-card__icon svg path,
+html.anim .service-card__icon svg rect,
+html.anim .service-card__icon svg circle { stroke-dasharray: 64; stroke-dashoffset: 64; }
+html.anim .service-card.is-in .service-card__icon svg path,
+html.anim .service-card.is-in .service-card__icon svg rect,
+html.anim .service-card.is-in .service-card__icon svg circle {
+  animation: drawIcon 1s var(--ease) forwards; animation-delay: .25s;
+}
+@keyframes drawIcon { to { stroke-dashoffset: 0; } }
+
+/* ---- Stats band (odometer + ring) -------------------------------------- */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 10px 0 56px; }
+.stat { position: relative; text-align: center; display: grid; justify-items: center; gap: 6px; padding: 10px; }
+.stat__ring { position: absolute; top: -6px; width: 92px; height: 92px; opacity: .5; }
+.stat__ring-bg { fill: none; stroke: var(--border); stroke-width: 3; }
+.stat__ring-fill {
+  fill: none; stroke: var(--teal); stroke-width: 3; stroke-linecap: round;
+  stroke-dasharray: 201; stroke-dashoffset: 201; transform: rotate(-90deg); transform-origin: center;
+  transition: stroke-dashoffset 1.5s var(--ease);
+}
+.stat__num { font-family: "Fraunces", serif; font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 300; line-height: 1; margin-top: 18px; }
+.stat__suffix { color: var(--teal); }
+.stat__label { font-size: .8rem; color: var(--text-dim); letter-spacing: .02em; }
+@media (max-width: 680px) { .stats { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
+
+/* ---- Reviews: two opposite rows + star pop ----------------------------- */
+.reviews__track { margin-bottom: 20px; }
+.reviews__track:last-child { margin-bottom: 0; }
+.review-card__stars .star { display: inline-block; transform: scale(1); }
+.reviews__marquee.stars-pop .review-card__stars .star { animation: starPop .5s var(--ease) backwards; }
+.reviews__marquee.stars-pop .review-card__stars .star:nth-child(2) { animation-delay: .07s; }
+.reviews__marquee.stars-pop .review-card__stars .star:nth-child(3) { animation-delay: .14s; }
+.reviews__marquee.stars-pop .review-card__stars .star:nth-child(4) { animation-delay: .21s; }
+.reviews__marquee.stars-pop .review-card__stars .star:nth-child(5) { animation-delay: .28s; }
+@keyframes starPop { from { transform: scale(0) rotate(-30deg); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* ---- How it works ------------------------------------------------------ */
+.howto__wrap { position: relative; }
+.howto__line { position: absolute; top: 34px; left: 0; width: 100%; height: 2px; overflow: visible; }
+.howto__line line { stroke: var(--border); stroke-width: 2; }
+.howto__line-fill { stroke: var(--teal); stroke-width: 2; stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1.4s var(--ease); }
+.howto.is-in .howto__line-fill { stroke-dashoffset: 0; }
+.howto__steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; position: relative; }
+.howto__step { text-align: left; }
+.howto__dot {
+  display: block; width: 14px; height: 14px; border-radius: 50%; margin-bottom: 26px;
+  background: var(--bg-2); border: 2px solid var(--border); position: relative; z-index: 2;
+  transition: background .4s var(--ease), border-color .4s var(--ease), box-shadow .4s var(--ease);
+}
+.howto.is-in .howto__step:nth-child(1) .howto__dot { transition-delay: .2s; }
+.howto.is-in .howto__step:nth-child(2) .howto__dot { transition-delay: .6s; }
+.howto.is-in .howto__step:nth-child(3) .howto__dot { transition-delay: 1s; }
+.howto.is-in .howto__dot { background: var(--teal); border-color: var(--teal); box-shadow: 0 0 0 6px color-mix(in oklab, var(--teal) 18%, transparent); }
+.howto__num { font-family: "Fraunces", serif; font-size: 2.2rem; font-weight: 300; color: var(--teal); display: block; margin-bottom: 6px; }
+.howto__step h3 { font-size: 1.5rem; margin-bottom: 8px; }
+.howto__step p { color: var(--text-dim); font-size: .95rem; max-width: 30ch; }
+@media (max-width: 760px) {
+  .howto__line { display: none; }
+  .howto__steps { grid-template-columns: 1fr; gap: 28px; }
+  .howto__step { padding-left: 34px; position: relative; }
+  .howto__step .howto__dot { position: absolute; left: 0; top: 6px; margin: 0; }
+}
+
+/* ---- Appointment: glowing focus + slot pop ----------------------------- */
+.field input:focus, .field select:focus, .field textarea:focus {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--teal) 22%, transparent);
+}
+/* Slots are visible by default; .pop (added by JS when in view) plays the
+   stagger with `backwards` fill so they are never left invisible. */
+html.anim .slots.pop .slot { animation: slotPop .5s var(--ease) backwards; }
+html.anim .slots.pop .slot:nth-child(2) { animation-delay: .05s; }
+html.anim .slots.pop .slot:nth-child(3) { animation-delay: .1s; }
+html.anim .slots.pop .slot:nth-child(4) { animation-delay: .15s; }
+html.anim .slots.pop .slot:nth-child(5) { animation-delay: .2s; }
+html.anim .slots.pop .slot:nth-child(6) { animation-delay: .25s; }
+@keyframes slotPop { from { opacity: 0; transform: scale(.8); } to { opacity: 1; transform: scale(1); } }
+
+/* ---- Confetti canvas --------------------------------------------------- */
+.confetti-canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1002; }
+
+/* ---- Footer big text slide-in ------------------------------------------ */
+.footer__big { font-family: "Fraunces", serif; font-size: clamp(2.4rem, 9vw, 6rem); font-weight: 300; line-height: .95; letter-spacing: -0.01em; color: var(--text); overflow: hidden; margin: 0 0 40px; }
+.footer__big span { display: inline-block; transform: translateY(110%); transition: transform 1s var(--ease); }
+.footer__big.is-in span { transform: translateY(0); }
+html:not(.anim) .footer__big span { transform: none; }
+
+/* ---- Doctors: clip-path wipe reveal + masked speciality ---------------- */
+html.anim .doctor-card__avatar { clip-path: inset(0 0 100% 0); transition: clip-path 1s var(--ease); }
+html.anim .doctor-card.is-in .doctor-card__avatar { clip-path: inset(0 0 0 0); }
+.doctor-card__spec { overflow: hidden; }
+html.anim .doctor-card__spec > span { display: inline-block; transform: translateY(115%); transition: transform .8s var(--ease) .35s; }
+html.anim .doctor-card.is-in .doctor-card__spec > span { transform: translateY(0); }
+
+/* ---- Smooth section background blends ---------------------------------- */
+.section.pricing { background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--teal) 4%, transparent), transparent); border-radius: 40px; }
+.section.howto { background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--teal) 3%, transparent), transparent); }
 
 /* ---- Layout safety: never overflow or shift ---------------------------- */
 /* Grid/flex children can blow out their track without this. */

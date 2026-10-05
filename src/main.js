@@ -22,6 +22,8 @@ function boot() {
     import("./modules/reveal-lite.js")
       .then((m) => m.initReveals())
       .catch(() => document.documentElement.classList.remove("anim")); // never hide text
+    // Section effects (accordion, stats, marquee, orbs…) — all devices, light.
+    import("./modules/effects.js").then((m) => m.initEffects()).catch(() => {});
     if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
       import("./modules/enhance-desktop.js").then((m) => m.initDesktopEnhance()).catch(() => {});
     }

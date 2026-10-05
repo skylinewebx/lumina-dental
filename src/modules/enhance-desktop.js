@@ -32,4 +32,34 @@ export function initDesktopEnhance() {
   });
 
   initCursor(); // custom cursor dot/ring + magnetic buttons
+
+  // Services: 3D tilt toward the cursor + a moving light spot (--mx/--my).
+  document.querySelectorAll(".service-card").forEach((card) => {
+    card.addEventListener("pointermove", (e) => {
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;
+      const py = (e.clientY - r.top) / r.height;
+      card.style.setProperty("--mx", px * 100 + "%");
+      card.style.setProperty("--my", py * 100 + "%");
+      card.style.transform =
+        `perspective(700px) rotateY(${(px - 0.5) * 10}deg) rotateX(${-(py - 0.5) * 10}deg) translateY(-6px)`;
+    });
+    card.addEventListener("pointerleave", () => { card.style.transform = ""; });
+  });
+
+  // Doctors: subtle photo parallax within the circular frame.
+  const docImgs = [...document.querySelectorAll(".doctor-card .doctor-photo img")];
+  if (docImgs.length) {
+    const parallax = () => {
+      const vh = window.innerHeight;
+      docImgs.forEach((img) => {
+        const r = img.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > vh) return;
+        const off = (r.top + r.height / 2 - vh / 2) / vh; // -0.5..0.5
+        img.style.transform = `translate3d(0, ${off * -14}px, 0) scale(1.08)`;
+      });
+    };
+    lenis.on("scroll", parallax);
+    parallax();
+  }
 }

@@ -62,7 +62,7 @@ export function initReveals() {
     { rootMargin: "0px 0px -6% 0px", threshold: 0.05 }
   );
   const targets = document.querySelectorAll(
-    "[data-reveal], [data-split], .service-card, .price-row, .doctor-card"
+    "[data-reveal], [data-split], .service-card, .price-item, .doctor-card"
   );
   // Stagger grouped items with a small per-index transition-delay.
   const groups = {};
@@ -74,7 +74,7 @@ export function initReveals() {
     io.observe(el);
   });
   groups.k && groups.k.forEach((arr) => arr.forEach((el, i) => {
-    if (el.matches(".service-card, .price-row, .doctor-card")) el.style.transitionDelay = (i % 4) * 0.07 + "s";
+    if (el.matches(".service-card, .price-item, .doctor-card")) el.style.transitionDelay = (i % 4) * 0.07 + "s";
   }));
 
   // Mark success so the boot failsafe knows reveals initialised.

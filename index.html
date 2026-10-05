@@ -7,8 +7,9 @@
     <title>Lumina Dental Care — Dentistry that feels like light</title>
 
     <!-- Enable entrance animations up front (before paint) so reveal states are
-         set from the first frame — the reveal engine then loads after paint. -->
-    <script>document.documentElement.classList.add("anim");</script>
+         set from the first frame — the reveal engine then loads after paint.
+         Skipped under reduced-motion so nothing is ever left hidden. -->
+    <script>try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("anim");}catch(e){}</script>
 
     <!-- Preload the hero image (LCP) responsively, AVIF with WebP intent -->
     <link rel="preload" as="image" type="image/avif" fetchpriority="high"
@@ -23,6 +24,13 @@
   <body>
     <!-- Scroll progress bar -->
     <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Ambient teal glow orbs (drift + parallax, behind everything) -->
+    <div class="orbs" id="orbs" aria-hidden="true">
+      <span class="orb orb--1"></span>
+      <span class="orb orb--2"></span>
+      <span class="orb orb--3"></span>
+    </div>
 
     <!-- Custom cursor (hidden on touch) -->
     <div class="cursor-dot" id="cursorDot"></div>
@@ -176,8 +184,29 @@
           <p class="section__eyebrow" data-reveal>KIND WORDS</p>
           <h2 class="section__title split" data-split>Smiles worth talking about.</h2>
         </div>
+
+        <!-- Animated stats band (odometer count-up + progress ring) -->
+        <div class="stats" id="statsBand" aria-label="Clinic statistics"></div>
+
+        <!-- Two-row marquee moving in opposite directions -->
         <div class="reviews__marquee" id="reviewsMarquee">
-          <div class="reviews__track" id="reviewsTrack"></div>
+          <div class="reviews__track" id="reviewsTrackA" data-dir="left"></div>
+          <div class="reviews__track" id="reviewsTrackB" data-dir="right"></div>
+        </div>
+      </section>
+
+      <!-- ===================== HOW IT WORKS ===================== -->
+      <section class="section howto" id="howto">
+        <div class="section__head">
+          <p class="section__eyebrow" data-reveal>SIMPLE FROM START TO SMILE</p>
+          <h2 class="section__title split" data-split>Three easy steps.</h2>
+        </div>
+        <div class="howto__wrap">
+          <svg class="howto__line" viewBox="0 0 1000 2" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="0" y1="1" x2="1000" y2="1" />
+            <line x1="0" y1="1" x2="1000" y2="1" class="howto__line-fill" id="howtoLineFill" />
+          </svg>
+          <div class="howto__steps" id="howtoSteps"></div>
         </div>
       </section>
 
@@ -205,7 +234,7 @@
             <div class="field-row">
               <div class="field">
                 <label for="phone">Phone</label>
-                <input type="tel" id="phone" name="phone" required autocomplete="tel" placeholder="+91 …" />
+                <input type="tel" id="phone" name="phone" required autocomplete="tel" placeholder="+1 …" />
               </div>
               <div class="field">
                 <label for="email">Email <span class="muted">(optional)</span></label>
@@ -276,6 +305,7 @@
 
     <!-- ===================== FOOTER ===================== -->
     <footer class="footer">
+      <p class="footer__big"><span>Your brightest smile starts here.</span></p>
       <div class="footer__top">
         <a href="#top" class="nav__logo" data-cursor>
           <span class="nav__logo-mark" aria-hidden="true"></span>

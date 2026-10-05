@@ -94,9 +94,10 @@ export function initForm() {
     ].filter(Boolean);
     const waUrl = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(lines.join("\n"))}`;
 
-    // Animated success state, then open WhatsApp.
+    // Animated success state + confetti, then open WhatsApp.
     success.classList.add("is-open");
     success.setAttribute("aria-hidden", "false");
+    window.dispatchEvent(new CustomEvent("booking:success"));
     setTimeout(() => window.open(waUrl, "_blank", "noopener"), 1100);
 
     function reset() {
