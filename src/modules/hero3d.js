@@ -47,8 +47,9 @@ export function initHero3D() {
   const MAX_DPR = isMobile ? 1.5 : 2; // lighter render on phones for steady 60fps
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-  camera.position.set(0, 0, 7);
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 120);
+  camera.position.set(0, 0.7, 7);
+  camera.lookAt(0, -0.1, 0); // tilt down slightly so the water recedes to a horizon
 
   const renderer = new THREE.WebGLRenderer({
     canvas, antialias: true, alpha: true, powerPreference: "high-performance",
@@ -69,7 +70,23 @@ export function initHero3D() {
 
   renderer.setClearColor(0x000000, 0);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.15;
+  renderer.toneMappingExposure = 1.12;
+
+  // ---- Sunset sky + atmosphere (evokes the reference's ocean-at-sunset) ----
+  const theme = () => document.documentElement.getAttribute("data-theme") || "dark";
+  const sky = makeSkyTexture(theme());
+  scene.background = sky;
+  const horizon = new THREE.Color(theme() === "light" ? 0xbfe0dd : 0x123042);
+  scene.fog = new THREE.Fog(horizon, 9, 24);
+  // Re-tint if the user flips light/dark.
+  const waterColor = () => (theme() === "light" ? 0x9ec9c6 : 0x0a2230);
+  const themeObs = new MutationObserver(() => {
+    scene.background = makeSkyTexture(theme());
+    scene.fog.color.set(theme() === "light" ? 0xcfe8e6 : 0x123042);
+    if (water) water.material.color.set(waterColor());
+    renderer.toneMappingExposure = theme() === "light" ? 1.25 : 1.12;
+  });
+  themeObs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
   // Group we actually move/rotate (so model origin doesn't matter).
   const pivot = new THREE.Group();
@@ -135,6 +152,18 @@ export function initHero3D() {
   const sparkles = buildSparkles(isMobile ? 70 : 140);
   scene.add(sparkles);
 
+  /* ---- Reflective "water" plane (calm ocean catching the sky) ---- */
+  const water = new THREE.Mesh(
+    new THREE.PlaneGeometry(60, 60, 1, 1),
+    new THREE.MeshStandardMaterial({
+      color: theme() === "light" ? 0x9ec9c6 : 0x0a2230, metalness: 0.9, roughness: 0.14,
+      envMapIntensity: 1.2, transparent: true, opacity: 0.92,
+    })
+  );
+  water.rotation.x = -Math.PI / 2;
+  water.position.y = -2.1;
+  scene.add(water);
+
   /* ---- Pointer tracking (normalized -1..1) ---- */
   const pointer = { x: 0, y: 0 };
   const target = { x: 0, y: 0 };
@@ -169,6 +198,7 @@ export function initHero3D() {
   /* ---- Render loop (paused when hero is off-screen or tab hidden) ---- */
   let lastInput = performance.now();
   const clock = new THREE.Clock();
+  let elapsed = 0; // accumulated time (delta-based, for frame-rate independence)
   let running = false;
   let rafId = null;
   let signalledReady = false;
@@ -202,13 +232,16 @@ export function initHero3D() {
 
   function render() {
     if (!running) return;
-    const t = clock.getElapsedTime();
+    // Delta time (clamped) → identical motion at 60/120/240Hz, just smoother.
+    const dt = Math.min(0.05, clock.getDelta());
+    elapsed += dt;
+    const t = elapsed;
     const idle = performance.now() - lastInput > TOOTH.idleAfterMs;
 
-    // Ease the pointer toward its target. This single slow lerp is what gives
-    // the follow its heavy, premium feel (responsive but never twitchy).
-    pointer.x += (target.x - pointer.x) * TOOTH.lerp;
-    pointer.y += (target.y - pointer.y) * TOOTH.lerp;
+    // Frame-rate-independent easing: same feel regardless of refresh rate.
+    const f = 1 - Math.pow(1 - TOOTH.lerp, dt * 60);
+    pointer.x += (target.x - pointer.x) * f;
+    pointer.y += (target.y - pointer.y) * f;
 
     if (pivot.children.length) {
       const baseX = isMobile ? 0 : TOOTH.baseXDesktop;
@@ -307,10 +340,32 @@ function buildEnvScene() {
     m.lookAt(0, 0, 0);
     s.add(m);
   };
-  makeLight(0xffffff, 0, 8, 2, 8);
-  makeLight(0x3fd0c0, -8, 0, 3, 7);
-  makeLight(0x9ff5e6, 6, -4, -4, 6);
+  makeLight(0xffe3c0, 0, 7, 3, 9);   // warm sun (top)
+  makeLight(0xff9e6a, 2, 2, 6, 7);   // sunset glow
+  makeLight(0x3fd0c0, -8, 0, 3, 7);  // teal
+  makeLight(0x9ff5e6, 6, -4, -4, 6); // mint rim
   return s;
+}
+
+/* Vertical gradient "sky" used as the scene background — warm sunset up top,
+   blending through teal into a deep sea tone (or airy tones in light mode). */
+function makeSkyTexture(mode = "dark") {
+  const c = document.createElement("canvas");
+  c.width = 4; c.height = 256;
+  const ctx = c.getContext("2d");
+  const g = ctx.createLinearGradient(0, 0, 0, 256);
+  if (mode === "light") {
+    g.addColorStop(0, "#ffd9b0"); g.addColorStop(0.35, "#ffe9d6");
+    g.addColorStop(0.62, "#cfeceb"); g.addColorStop(1, "#afd7d4");
+  } else {
+    g.addColorStop(0, "#f7a878"); g.addColorStop(0.28, "#d98a74");
+    g.addColorStop(0.52, "#4a7f84"); g.addColorStop(0.78, "#143544");
+    g.addColorStop(1, "#070e18");
+  }
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 4, 256);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
 }
 
 /* Sparkle particle field behind the tooth. */

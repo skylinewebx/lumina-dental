@@ -8,6 +8,7 @@
 const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export function initEffects() {
+  import("./doctors.js").then((m) => m.initDoctors()).catch(() => {});
   initAccordion();
   initStats();
   initReviewsMarquee();
@@ -18,6 +19,34 @@ export function initEffects() {
   initRevealOnce("#slots", "pop");
   initRevealOnce(".footer__big", "is-in");
   initAdaptiveQuality();
+  initDebugOverlay();
+}
+
+/* ---- Debug overlay: live fps + frame time (F key or ?debug=1) ----------- */
+function initDebugOverlay() {
+  const el = document.createElement("div");
+  el.className = "fps-debug";
+  el.setAttribute("aria-hidden", "true");
+  document.body.appendChild(el);
+  let on = /[?&]debug=1/.test(location.search);
+  const apply = () => el.classList.toggle("is-on", on);
+  apply();
+  addEventListener("keydown", (e) => {
+    if ((e.key === "f" || e.key === "F") && !/input|textarea|select/i.test(e.target.tagName)) { on = !on; apply(); }
+  });
+  let last = performance.now(), ema = 16.7, lo = 999;
+  (function loop(now) {
+    const dt = now - last; last = now;
+    ema = ema * 0.9 + dt * 0.1;
+    if (on) {
+      const fps = 1000 / ema;
+      lo = Math.min(lo, fps);
+      const q = document.documentElement.classList.contains("q-low") ? "low"
+        : document.documentElement.classList.contains("q-med") ? "med" : "high";
+      el.textContent = `${fps.toFixed(0)} fps · ${ema.toFixed(1)} ms · min ${lo.toFixed(0)} · q:${q}`;
+    } else { lo = 999; }
+    requestAnimationFrame(loop);
+  })(last);
 }
 
 /* Add `cls` to the first matching element(s) once they scroll into view. */

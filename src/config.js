@@ -132,13 +132,34 @@ export const CONFIG = {
     { value: 98, suffix: "%", label: "Would recommend" },
   ],
 
-  /* ---- Doctors (3) ------------------------------------------------------- */
+  /* ---- Doctors (exactly 3) — full "Choose Your Specialist" profiles -------
+     photoKey = a key in src/assets-manifest.json (optimised portrait).
+     All sample content — edit freely here.                                   */
   doctors: [
-    // photoKey = a key in src/assets-manifest.json (optimised portrait). Leave
-    // empty to show the elegant initials avatar instead.
-    { name: "Dr. James Whitaker", speciality: "Implantologist", qualification: "DDS, Prosthodontics", experience: "14 years", photoKey: "doctor-james" },
-    { name: "Dr. Emily Carter", speciality: "Orthodontist", qualification: "DDS, MS Orthodontics", experience: "11 years", photoKey: "doctor-emily" },
-    { name: "Dr. Sophia Bennett", speciality: "Pediatric Dentist", qualification: "DDS, Pediatric Dentistry", experience: "12 years", photoKey: "doctor-sophia" },
+    {
+      name: "Dr. James Whitaker", first: "James", speciality: "Implantologist", photoKey: "doctor-james",
+      age: 42, experience: "14 yrs", inField: "14 yrs", atClinic: "7 yrs",
+      qualification: "DDS, Prosthodontics", university: "NYU College of Dentistry",
+      treatments: ["Dental implants", "Full-arch restoration", "Crowns & bridges"],
+      patients: "4,200+", languages: ["English", "Spanish"],
+      bio: "Rebuilds confident smiles with precise, natural-looking implant work.",
+    },
+    {
+      name: "Dr. Emily Carter", first: "Emily", speciality: "Orthodontist", photoKey: "doctor-emily",
+      age: 38, experience: "11 yrs", inField: "11 yrs", atClinic: "5 yrs",
+      qualification: "DDS, MS Orthodontics", university: "University of Michigan",
+      treatments: ["Clear aligners", "Braces", "Bite correction"],
+      patients: "3,600+", languages: ["English", "French"],
+      bio: "Straightens smiles quietly and comfortably, at any age.",
+    },
+    {
+      name: "Dr. Sophia Bennett", first: "Sophia", speciality: "Pediatric Dentist", photoKey: "doctor-sophia",
+      age: 44, experience: "12 yrs", inField: "12 yrs", atClinic: "8 yrs",
+      qualification: "DDS, Pediatric Dentistry", university: "UCLA School of Dentistry",
+      treatments: ["Kids check-ups", "Sealants & fluoride", "Gentle fillings"],
+      patients: "5,100+", languages: ["English", "Portuguese"],
+      bio: "Makes every child's visit calm, playful and completely fear-free.",
+    },
   ],
 
   /* ---- Reviews ----------------------------------------------------------- */

@@ -51,10 +51,6 @@ export function renderContent() {
   });
   const fc = document.getElementById("footerCopy");
   if (fc) fc.textContent = `© ${new Date().getFullYear()} ${clinic.name}. All rights reserved.`;
-
-  // Hero ambient bokeh video element (bytes load lazily, after paint).
-  const heroBg = document.getElementById("heroBg");
-  if (heroBg) heroBg.innerHTML = lazyVideo("hero-bg", { className: "hero__bg-video" });
 }
 
 /* Heavy, below-the-fold sections — built after first paint / on idle. */
@@ -124,28 +120,52 @@ export function renderSections() {
   const note = document.getElementById("pricingNote");
   if (note) note.textContent = pricesNote;
 
-  /* ---- Doctors (with hover tilt) ---- */
-  const dg = document.getElementById("doctorsGrid");
-  if (dg) {
-    dg.innerHTML = doctors
-      .map((d) => {
-        const initials = d.name.replace("Dr. ", "").split(" ").map((n) => n[0]).join("");
-        const avatar = d.photoKey
-          ? responsivePicture(d.photoKey, { alt: d.name, sizes: "140px", className: "doctor-photo" })
-          : initials;
-        return `
-      <article class="doctor-card" data-tilt data-cursor>
-        <div class="doctor-card__avatar">${avatar}</div>
-        <h3>${d.name}</h3>
-        <p class="doctor-card__spec"><span>${d.speciality}</span></p>
-        <div class="doctor-card__meta">
-          <span>${d.qualification}</span>
-          <span>${d.experience} experience</span>
-        </div>
-      </article>`;
-      })
+  /* ---- Doctors: "Choose Your Specialist" layered stage + profile -------- */
+  const lastName = (n) => n.replace("Dr. ", "").split(" ").slice(-1)[0];
+  const stage = document.getElementById("specialistStage");
+  if (stage) {
+    stage.innerHTML = doctors
+      .map((d, i) => `
+      <figure class="spec-card" data-i="${i}">
+        ${d.photoKey ? responsivePicture(d.photoKey, { alt: d.name, sizes: "(max-width:760px) 80vw, 420px" })
+          : `<span class="spec-card__initials">${d.name.replace("Dr. ", "").split(" ").map((n) => n[0]).join("")}</span>`}
+        <figcaption class="spec-card__name">${d.name}<span>${d.speciality}</span></figcaption>
+      </figure>`)
       .join("");
-    initTilt();
+  }
+
+  const panel = document.getElementById("specialistPanel");
+  if (panel) {
+    panel.innerHTML = doctors
+      .map((d, i) => `
+      <article class="spec-panel${i === 0 ? " is-active" : ""}" data-i="${i}" role="tabpanel" aria-hidden="${i === 0 ? "false" : "true"}">
+        <p class="spec-panel__spec">${d.speciality}</p>
+        <h3 class="spec-panel__name">${d.name}</h3>
+        <p class="spec-panel__bio">${d.bio}</p>
+        <div class="spec-panel__grid">
+          <div><span class="k">Age</span><span class="v">${d.age}</span></div>
+          <div><span class="k">Experience</span><span class="v">${d.experience}</span></div>
+          <div><span class="k">In the field</span><span class="v">${d.inField}</span></div>
+          <div><span class="k">At Lumina</span><span class="v">${d.atClinic}</span></div>
+          <div><span class="k">Patients treated</span><span class="v">${d.patients}</span></div>
+          <div><span class="k">Languages</span><span class="v">${d.languages.join(", ")}</span></div>
+        </div>
+        <div class="spec-panel__row"><span class="k">Qualifications</span><span class="v">${d.qualification} · ${d.university}</span></div>
+        <div class="spec-panel__row"><span class="k">Key treatments</span><span class="v spec-panel__tags">${d.treatments.map((t) => `<span>${t}</span>`).join("")}</span></div>
+        <button class="btn btn--primary spec-panel__book" data-doctor="${d.name}" data-magnetic data-cursor>Book with Dr. ${lastName(d.name)}</button>
+      </article>`)
+      .join("");
+  }
+
+  const nav = document.getElementById("specialistNav");
+  if (nav) {
+    nav.innerHTML =
+      `<button class="specialist__arrow" data-dir="-1" aria-label="Previous specialist" data-cursor>‹</button>` +
+      doctors.map((d, i) => `
+        <button class="specialist__thumb${i === 0 ? " is-active" : ""}" data-i="${i}" role="tab" aria-selected="${i === 0}" aria-label="${d.name}, ${d.speciality}" data-cursor>
+          ${d.photoKey ? responsivePicture(d.photoKey, { alt: "", sizes: "48px" }) : `<span>${d.name.replace("Dr. ", "")[0]}</span>`}
+        </button>`).join("") +
+      `<button class="specialist__arrow" data-dir="1" aria-label="Next specialist" data-cursor>›</button>`;
   }
 
   /* ---- Stats band (odometer + ring; animated by effects.js on reveal) ---- */
@@ -240,19 +260,5 @@ export function renderSections() {
   // Activate blur-up fade-in and lazy video loading now the DOM exists.
   initBlurUp();
   initLazyVideos();
-}
-
-/* Doctor card 3D hover tilt (transform only). Disabled on touch. */
-function initTilt() {
-  if (window.matchMedia("(hover: none)").matches) return;
-  document.querySelectorAll("[data-tilt]").forEach((card) => {
-    card.addEventListener("pointermove", (e) => {
-      const r = card.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width - 0.5;
-      const py = (e.clientY - r.top) / r.height - 0.5;
-      card.style.transform = `rotateY(${px * 12}deg) rotateX(${-py * 12}deg) translateY(-4px)`;
-    });
-    card.addEventListener("pointerleave", () => { card.style.transform = ""; });
-  });
 }
 

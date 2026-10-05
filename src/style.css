@@ -339,26 +339,64 @@ html.anim .service-card.is-in:hover {
   .price-panel__meta, .price-panel__includes { grid-template-columns: 1fr; }
 }
 
-/* ---- Doctors ------------------------------------------------------------ */
-.doctors__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; perspective: 1000px; }
-.doctor-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-lg); padding: 26px; text-align: center;
-  will-change: transform, opacity; transform-style: preserve-3d;
-  transition: transform .3s var(--ease), box-shadow .4s, border-color .4s, background .4s, opacity .6s var(--ease);
+/* ---- Doctors: Choose Your Specialist ----------------------------------- */
+.specialist { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: clamp(28px, 5vw, 64px); align-items: center; }
+.specialist__stage { position: relative; height: clamp(360px, 46vw, 520px); perspective: 1200px; grid-row: span 2; }
+.spec-card {
+  position: absolute; top: 50%; left: 50%; width: min(78%, 360px); aspect-ratio: 3 / 4; margin: 0;
+  transform: translate(-50%, -50%); transform-origin: center;
+  border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border);
+  background: var(--surface-2); cursor: pointer; will-change: transform, opacity, filter;
+  box-shadow: 0 40px 90px -40px var(--shadow);
+  transition: transform .7s var(--ease), opacity .6s var(--ease), filter .6s var(--ease);
 }
-.doctor-card:hover { border-color: var(--teal); box-shadow: 0 30px 70px -28px var(--glow); background: var(--surface-2); }
-.doctor-card__avatar {
-  width: 120px; height: 120px; margin: 0 auto 20px; border-radius: 50%;
-  display: grid; place-items: center; font-family: "Fraunces", serif; font-size: 2.4rem;
-  color: var(--teal); background: linear-gradient(145deg, var(--surface-2), transparent);
-  border: 1px solid var(--border); overflow: hidden; transform: translateZ(40px);
+.spec-card .pic, .spec-card img { width: 100%; height: 100%; }
+.spec-card img { object-fit: cover; object-position: 50% 22%; }
+.spec-card__initials { position: absolute; inset: 0; display: grid; place-items: center; font-family: "Fraunces", serif; font-size: 4rem; color: var(--teal); }
+.spec-card__name {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 40px 20px 18px;
+  font-family: "Fraunces", serif; font-size: 1.25rem; color: #fff; line-height: 1.1;
+  background: linear-gradient(to top, rgba(4,8,13,.85), transparent);
 }
-.doctor-card__avatar img { width: 100%; height: 100%; object-fit: cover; }
-.doctor-card h3 { font-size: 1.3rem; margin-bottom: 4px; transform: translateZ(28px); }
-.doctor-card__spec { color: var(--teal); font-size: .9rem; letter-spacing: .04em; margin-bottom: 14px; transform: translateZ(24px); }
-.doctor-card__meta { color: var(--text-dim); font-size: .85rem; line-height: 1.7; transform: translateZ(18px); }
-.doctor-card__meta span { display: block; }
+.spec-card__name span { display: block; font-family: "Manrope", sans-serif; font-size: .82rem; color: var(--mint); margin-top: 3px; }
+/* Layered positions: front, then dimmed behind on each side */
+.spec-card.pos-0 { transform: translate(-50%, -50%) scale(1); opacity: 1; z-index: 3; filter: none; }
+.spec-card.pos-1 { transform: translate(-8%, -52%) scale(.74); opacity: .5; z-index: 2; filter: blur(2px) brightness(.65) saturate(.8); }
+.spec-card.pos-2 { transform: translate(-92%, -52%) scale(.66); opacity: .35; z-index: 1; filter: blur(3px) brightness(.55) saturate(.7); }
+.spec-card.pos-1 .spec-card__name, .spec-card.pos-2 .spec-card__name { opacity: 0; }
+
+/* Profile panel (stacked, crossfades) */
+.specialist__panel { position: relative; min-height: clamp(400px, 48vw, 460px); }
+.spec-panel { position: absolute; inset: 0; opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity .55s var(--ease), transform .55s var(--ease); }
+.spec-panel.is-active { opacity: 1; transform: none; pointer-events: auto; }
+.spec-panel__spec { font-size: .8rem; letter-spacing: .22em; text-transform: uppercase; color: var(--teal); margin: 0 0 8px; }
+.spec-panel__name { font-size: clamp(1.8rem, 3.2vw, 2.6rem); margin: 0 0 12px; }
+.spec-panel__bio { color: var(--text-dim); font-size: 1.02rem; margin: 0 0 22px; max-width: 42ch; }
+.spec-panel__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 20px; margin-bottom: 20px; }
+.spec-panel__grid > div { display: grid; gap: 3px; }
+.spec-panel .k { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--text-faint); }
+.spec-panel .v { font-size: .98rem; color: var(--text); }
+.spec-panel__row { display: grid; gap: 4px; padding: 12px 0; border-top: 1px solid var(--border); }
+.spec-panel__tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.spec-panel__tags span { font-size: .82rem; color: var(--text-dim); padding: 4px 12px; border: 1px solid var(--border); border-radius: 100px; }
+.spec-panel__book { margin-top: 20px; }
+
+/* Nav: arrows + thumbnails */
+.specialist__nav { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 6px; }
+.specialist__arrow { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 1.3rem; line-height: 1; display: grid; place-items: center; transition: transform .3s var(--ease), border-color .3s, color .3s; }
+.specialist__arrow:hover { border-color: var(--teal); color: var(--teal); transform: translateY(-2px); }
+.specialist__thumb { width: 52px; height: 52px; min-width: 44px; min-height: 44px; border-radius: 50%; overflow: hidden; border: 2px solid transparent; background: var(--surface-2); padding: 0; opacity: .6; transition: opacity .3s, border-color .3s, transform .3s var(--ease); }
+.specialist__thumb img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; }
+.specialist__thumb.is-active { opacity: 1; border-color: var(--teal); transform: scale(1.06); }
+.specialist__thumb:hover { opacity: 1; }
+@media (max-width: 760px) {
+  .specialist { grid-template-columns: 1fr; gap: 24px; }
+  .specialist__stage { grid-row: auto; height: clamp(340px, 90vw, 420px); }
+  .specialist__panel { min-height: 0; }
+  .spec-panel { position: relative; opacity: 1; transform: none; pointer-events: auto; display: none; }
+  .spec-panel.is-active { display: block; }
+  .spec-panel__grid { grid-template-columns: repeat(2, 1fr); }
+}
 
 /* ---- Reviews ------------------------------------------------------------ */
 .reviews__marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
@@ -480,30 +518,40 @@ html.anim .service-card { opacity: 0; transform: translate(var(--ex, 0px), var(-
 html.anim .service-card.is-in { opacity: 1; transform: none; }
 html.anim .price-item { opacity: 0; transform: translateY(40px); }
 html.anim .price-item.is-in { opacity: 1; transform: none; }
-html.anim .doctor-card { opacity: 0; transform: translateY(50px); }
-html.anim .doctor-card.is-in { opacity: 1; transform: none; }
 
-/* ---- Media: hero layers, blur-up, lazy video --------------------------- */
-/* Ambient bokeh loop behind everything in the hero. */
-.hero__bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
-.hero__bg-video {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-  opacity: 0; transition: opacity 1.2s var(--ease);
+/* ---- Hero: sunset-ocean backdrop (instant CSS, 3D fades in over it) ----- */
+.hero__sky {
+  position: absolute; inset: 0; z-index: 0; overflow: hidden;
+  background: linear-gradient(180deg, #f7a878 0%, #d98a74 28%, #4a7f84 52%, #143544 78%, #070e18 100%);
 }
-.hero__bg-video.is-playing { opacity: .45; }
-/* Instant tooth poster; crossfades out once the live 3D is ready. */
-.hero__poster {
-  position: absolute; inset: 0; z-index: 1; display: block;
-  width: 100%; height: 100%; pointer-events: none;
+:root[data-theme="light"] .hero__sky {
+  background: linear-gradient(180deg, #ffd9b0 0%, #ffe9d6 35%, #cfeceb 62%, #afd7d4 100%);
 }
-.hero__poster img {
-  width: 100%; height: 100%; object-fit: cover; object-position: 82% 45%;
-  opacity: .96; transition: opacity 1s var(--ease);
+.hero__sun {
+  position: absolute; left: 62%; top: 34%; width: 42vw; height: 42vw; transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(255,226,180,.9), rgba(255,160,110,.35) 35%, transparent 60%);
+  filter: blur(6px); pointer-events: none;
 }
-.hero.is-3d-ready .hero__poster img { opacity: 0; }
-.hero__canvas { opacity: 0; transition: opacity 1s var(--ease); }
+.hero__water {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 42%;
+  background: linear-gradient(180deg, transparent, rgba(7,14,24,.55)),
+              linear-gradient(180deg, rgba(74,127,132,.25), rgba(7,14,24,.7));
+}
+:root[data-theme="light"] .hero__water {
+  background: linear-gradient(180deg, transparent, rgba(175,215,212,.5));
+}
+.hero__canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; opacity: 0; transition: opacity 1.2s var(--ease); }
 .hero.is-3d-ready .hero__canvas { opacity: 1; }
-@media (max-width: 900px) { .hero__poster img { object-position: 50% 42%; } }
+/* Readability scrim behind the headline/text (over the sunset), both themes. */
+.hero::after {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(95deg, rgba(5,10,18,.6) 0%, rgba(5,10,18,.18) 42%, transparent 66%);
+}
+:root[data-theme="light"] .hero::after {
+  background: linear-gradient(95deg, rgba(244,247,248,.72) 0%, rgba(244,247,248,.25) 45%, transparent 68%);
+}
+
+/* ---- blur-up + lazy video --------------------------------------------- */
 
 /* Blur-up: the LQIP shows instantly; the real image fades in on load. */
 img.blur-up { background-size: cover; background-position: center; }
@@ -551,9 +599,6 @@ img.blur-up.is-loaded { filter: none; transform: none; }
 }
 
 /* Doctor photo fills the circular avatar. */
-.doctor-card__avatar .doctor-photo,
-.doctor-card__avatar .doctor-photo img { width: 100%; height: 100%; }
-.doctor-card__avatar .doctor-photo img { object-fit: cover; transition: transform .2s linear; }
 
 /* =============================================================================
    PREMIUM SECTION UPGRADES
@@ -665,6 +710,15 @@ html.anim .slots.pop .slot:nth-child(6) { animation-delay: .25s; }
 /* ---- Confetti canvas --------------------------------------------------- */
 .confetti-canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1002; }
 
+/* ---- Debug fps overlay (hidden unless toggled) ------------------------- */
+.fps-debug {
+  position: fixed; bottom: 12px; left: 12px; z-index: 1003; display: none;
+  font: 500 12px/1 ui-monospace, Menlo, monospace; color: #9ff5e6;
+  background: rgba(5,10,18,.8); border: 1px solid var(--border); border-radius: 8px;
+  padding: 7px 10px; pointer-events: none; letter-spacing: .02em;
+}
+.fps-debug.is-on { display: block; }
+
 /* ---- Footer big text slide-in ------------------------------------------ */
 .footer__big { font-family: "Fraunces", serif; font-size: clamp(2.4rem, 9vw, 6rem); font-weight: 300; line-height: .95; letter-spacing: -0.01em; color: var(--text); overflow: hidden; margin: 0 0 40px; }
 .footer__big span { display: inline-block; transform: translateY(110%); transition: transform 1s var(--ease); }
@@ -672,11 +726,6 @@ html.anim .slots.pop .slot:nth-child(6) { animation-delay: .25s; }
 html:not(.anim) .footer__big span { transform: none; }
 
 /* ---- Doctors: clip-path wipe reveal + masked speciality ---------------- */
-html.anim .doctor-card__avatar { clip-path: inset(0 0 100% 0); transition: clip-path 1s var(--ease); }
-html.anim .doctor-card.is-in .doctor-card__avatar { clip-path: inset(0 0 0 0); }
-.doctor-card__spec { overflow: hidden; }
-html.anim .doctor-card__spec > span { display: inline-block; transform: translateY(115%); transition: transform .8s var(--ease) .35s; }
-html.anim .doctor-card.is-in .doctor-card__spec > span { transform: translateY(0); }
 
 /* ---- Smooth section background blends ---------------------------------- */
 .section.pricing { background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--teal) 4%, transparent), transparent); border-radius: 40px; }
