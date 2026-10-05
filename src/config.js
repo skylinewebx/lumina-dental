@@ -197,17 +197,20 @@ export const CONFIG = {
     glowColor: "#3FD0C0",
   },
 
-  /* ---- Asset paths (swap placeholders here once your files arrive) ------- */
+  /* ---- Incoming assets (wire in when the files arrive) -------------------
+     Leave empty to keep the current built-in placeholders. Fill a path/array
+     and the matching feature switches on automatically.                     */
+  incoming: {
+    // Hero "falling teeth": list the transparent PNG keys (run `npm run media`
+    // after dropping files in /public/assets/images/teeth/). Empty = off.
+    fallingTeeth: [],                 // e.g. ["tooth-a","tooth-b","tooth-c"]
+    heroSceneVideo: "",               // /assets/videos/hero-scene.mp4 (optional backdrop)
+    doctorsLoopVideo: "",             // /assets/videos/doctors-loop.mp4 (optional ambient)
+  },
+
+  /* ---- Asset paths (legacy swap points) --------------------------------- */
   assets: {
-    images: {
-      // doctor portraits, clinic photos, hero poster, etc.
-      heroPoster: "/assets/images/hero-poster.jpg",
-      clinic1: "/assets/images/clinic-1.jpg",
-      clinic2: "/assets/images/clinic-2.jpg",
-    },
-    videos: {
-      heroLoop: "/assets/videos/hero-loop.mp4",
-      toothScrub: "/assets/videos/tooth-rotation.mp4",
-    },
+    images: { clinic1: "/assets/images/clinic-1.jpg", clinic2: "/assets/images/clinic-2.jpg" },
+    videos: { toothScrub: "/assets/videos/tooth-rotation.mp4" },
   },
 };
