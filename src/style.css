@@ -520,15 +520,24 @@ html.anim .price-item { opacity: 0; transform: translateY(40px); }
 html.anim .price-item.is-in { opacity: 1; transform: none; }
 
 /* ---- Hero: real scene video + falling teeth + 3D tooth ----------------- */
+/* The scene is blurred + darkened into an atmospheric backdrop, so its baked
+   tooth never competes with the single interactive 3D tooth on the right. */
+/* Premium dark base so the hero is clean and the text always reads. */
+.hero { background: radial-gradient(120% 90% at 70% 10%, #0e1b24 0%, #0a111b 45%, #070b12 100%); }
+:root[data-theme="light"] .hero { background: radial-gradient(120% 90% at 70% 10%, #eef5f4 0%, #e7f0ef 45%, #f4f7f8 100%); }
+/* The scene video is a faint, heavily-blurred atmospheric wash (its own tooth
+   dissolves at this opacity + blur) so only the 3D tooth reads as a tooth. */
 .hero__scene {
   position: absolute; inset: 0; z-index: 0; overflow: hidden;
-  background: #070e18 center/cover no-repeat; /* poster shows instantly */
+  background: #070e18 center/cover no-repeat;
+  filter: blur(22px) brightness(.55) saturate(1.25); opacity: .35;
 }
-.hero__scene-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-/* Falling teeth: pre-rendered loop + drifting PNG teeth (screen-blended) */
-.hero__teeth { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; mix-blend-mode: screen; }
-.hero__teeth-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .5; }
-.falling-tooth { position: absolute; top: 0; left: 0; display: block; will-change: transform; opacity: .85; }
+:root[data-theme="light"] .hero__scene { filter: blur(22px) brightness(1) saturate(1.1); opacity: .5; }
+.hero__scene-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.15); }
+/* Falling teeth: pre-rendered loop (very faint, blurred) + transparent teeth */
+.hero__teeth { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+.hero__teeth-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: screen; filter: blur(3px); }
+.hero__teeth-video.lazy-video.is-playing { opacity: .22; } /* beat .lazy-video.is-playing */
 .falling-tooth .pic, .falling-tooth img { width: 100%; height: auto; display: block; }
 /* Teal particle overlay */
 .hero__fx { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; mix-blend-mode: screen; opacity: .5; }
@@ -539,11 +548,17 @@ html.anim .price-item.is-in { opacity: 1; transform: none; }
 /* Readability scrim behind the headline/text, both themes. */
 .hero::after {
   content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  background: linear-gradient(95deg, rgba(5,10,18,.72) 0%, rgba(5,10,18,.28) 42%, transparent 66%),
-              linear-gradient(0deg, rgba(5,10,18,.5), transparent 30%);
+  background: linear-gradient(95deg, rgba(5,10,18,.82) 0%, rgba(5,10,18,.45) 40%, rgba(5,10,18,.1) 62%, transparent 75%),
+              linear-gradient(0deg, rgba(5,10,18,.55), transparent 32%);
 }
 :root[data-theme="light"] .hero::after {
-  background: linear-gradient(95deg, rgba(244,247,248,.78) 0%, rgba(244,247,248,.3) 45%, transparent 68%);
+  background: linear-gradient(95deg, rgba(244,247,248,.88) 0%, rgba(244,247,248,.5) 42%, rgba(244,247,248,.1) 64%, transparent 76%);
+}
+/* Mobile: the tooth sits behind the stacked text at lower opacity. */
+@media (max-width: 760px) {
+  .hero.is-3d-ready .hero__canvas { opacity: .5; }
+  .hero::after { background: linear-gradient(180deg, rgba(5,10,18,.78) 0%, rgba(5,10,18,.45) 45%, rgba(5,10,18,.7) 100%); }
+  :root[data-theme="light"] .hero::after { background: linear-gradient(180deg, rgba(244,247,248,.85) 0%, rgba(244,247,248,.5) 45%, rgba(244,247,248,.8) 100%); }
 }
 
 /* ---- Service cards with treatment photo -------------------------------- */

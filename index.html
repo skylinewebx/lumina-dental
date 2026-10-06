@@ -36,6 +36,9 @@
          Skipped under reduced-motion so nothing is ever left hidden. -->
     <script>try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("anim");}catch(e){}</script>
 
+    <!-- Instant hero backdrop: preload the scene poster (LCP) -->
+    <link rel="preload" as="image" href="/assets/videos/hero-scene-poster.webp" fetchpriority="high" />
+
     <!-- Self-hosted fonts (Latin subset). Preload the two used above the fold
          so text is crisp immediately and never reflows (no CLS from swap). -->
     <link rel="preload" as="font" type="font/woff2" href="/fonts/fraunces-300.woff2" crossorigin />

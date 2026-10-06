@@ -74,48 +74,42 @@
     },
     "teeth/tooth-1": {
       "widths": [
-        320,
-        560
+        512
       ],
       "ratio": 1,
       "lqip": "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAAAQBQCdASoYABgAPu1iqE4ppaOiMBgMATAdiWUAuzOOwaoA0MUrgv2K2KxLKjH2CQgAAP7ymOW7fwy1YSeve0gLZl6MCOsCj4ubp32IXFeyM3IpoUPFM/SRzNwX//eQrDoJgr9qa3dE4wnMF3CwGoa1kOYTwD4h9Hw8AA=="
     },
     "teeth/tooth-2": {
       "widths": [
-        320,
-        560
+        512
       ],
       "ratio": 1,
       "lqip": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAABQBACdASoYABgAPu1mq06ppaQiKA1RMB2JZwDBzBEc9Lgrfrl1iH7iheAAAP7ymNCn6F6Bx17B7sPh+q4CYdgBgmU7+Gh3NmvR0bmoUMATI3MxWLYr4O5SnzaKWorMlc+SABAV62igvye77c93aoAA"
     },
     "teeth/tooth-3": {
       "widths": [
-        320,
-        560
+        512
       ],
       "ratio": 1,
       "lqip": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAADwBACdASoYABgAPt1YpU2opSOiN/qoARAbiWUAvdAh39vejrUObIgSYotETUc0uAAA/vQju03yFu7J4J9Brby3aTppnyXY2SzSN9kJmwPzxZF3zUyLU/YJT2C8EejUfrNNwKFSS8BIa8nhhDAAAA=="
     },
     "teeth/tooth-4": {
       "widths": [
-        320,
-        560
+        512
       ],
       "ratio": 1,
       "lqip": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAAAwBACdASoYABgAPuFgpU2oqiOiN/VYAUAcCWUAuwAQ8KsZvXMwRK6uIgAA/vVx6P4yid277BV0RDqRvuTrG5trAg/K1gmjiZifefl1vft6ELNTy+aUklAe8my6bw5kCBk2x9AWdlxWo5t8AAA="
     },
     "teeth/tooth-5": {
       "widths": [
-        320,
-        560
+        512
       ],
       "ratio": 1,
       "lqip": "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAACQBACdASoYABgAPu1wsFKppiSiqAgBMB2JYwCdMoABqgSn1RPHUWyn0UI+VAAA/vQjIPr6QD9ShDbZoZyqEt7Xf1NgXIXvaRy1qtoqGBVq6xGnayAdwO3D7tVMujbvX5RVk0wyzfC0TxOrOWRxHxjClHEUxk+hnAAAAA=="
     },
     "teeth/tooth-6": {
       "widths": [
-        320,
-        560
+        512
       ],
       "ratio": 1,
       "lqip": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAACwBACdASoYABgAPu1mq08ppaOjKA1RMB2JYwAALnYIHDEfQKcKwLr8d6hPbjjAAP7ymOW907Onl2seLGffTGE4KoxMUcOxPeyif7xwqA5pM2HP3qJGBwGW9UFePK9ts8of012uUn1fNuYYn+tCMAwA"

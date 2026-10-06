@@ -39,12 +39,19 @@ export function responsivePicture(name, { alt = "", sizes = "100vw", eager = fal
   </picture>`;
 }
 
-// Fade the real image in over its blur once decoded.
+// Fade the real image in over its blur once it is fully decoded (no flash).
 export function initBlurUp() {
   document.querySelectorAll("img.blur-up").forEach((img) => {
     const done = () => img.classList.add("is-loaded");
-    if (img.complete && img.naturalWidth) done();
-    else img.addEventListener("load", done, { once: true });
+    if (img.complete && img.naturalWidth) { done(); return; }
+    // Prefer decode() so the bitmap is ready before we reveal it.
+    if (img.decode) {
+      const tryDecode = () => img.decode().then(done).catch(() => img.addEventListener("load", done, { once: true }));
+      img.addEventListener("load", () => img.decode().then(done).catch(done), { once: true });
+      tryDecode();
+    } else {
+      img.addEventListener("load", done, { once: true });
+    }
   });
 }
 
@@ -94,7 +101,7 @@ export function initLazyVideos() {
 
   const io = new IntersectionObserver(
     (entries) => entries.forEach((e) => { if (e.isIntersecting) { attach(e.target); } }),
-    { rootMargin: "600px 0px" } // start loading before it scrolls in
+    { rootMargin: "800px 0px" } // start loading well before it scrolls in
   );
   // Start observing only after full load so video bytes never compete with the
   // LCP image/fonts. (Below-fold videos wait for scroll anyway.)

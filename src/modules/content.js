@@ -61,13 +61,7 @@ export function renderContent() {
   }
 
   const heroTeeth = document.getElementById("heroTeeth");
-  if (heroTeeth) {
-    let html = inc.teethFall ? lazyVideo(inc.teethFall, { className: "hero__teeth-video" }) : "";
-    (inc.fallingTeeth || []).forEach((key, i) => {
-      html += `<span class="falling-tooth" data-i="${i}">${responsivePicture(key, { alt: "", sizes: "90px", eager: false })}</span>`;
-    });
-    heroTeeth.innerHTML = html;
-  }
+  if (heroTeeth && inc.teethFall) heroTeeth.innerHTML = lazyVideo(inc.teethFall, { className: "hero__teeth-video" });
   const heroFx = document.getElementById("heroFx");
   if (heroFx && inc.particles) heroFx.innerHTML = responsivePicture(inc.particles, { alt: "", sizes: "100vw" });
 }

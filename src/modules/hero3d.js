@@ -35,8 +35,8 @@ const TOOTH = {
   idleSwayDeg: 3,    // gentle rotation sway amount
   idleFloat: 0.05,   // gentle vertical bob (world units)
 
-  baseXDesktop: 0.3,  // sits over the scene's centred island-tooth
-  baseYDesktop: -0.55, // dropped so it overlaps the island tooth (merges visually)
+  baseXDesktop: 2.05, // the ONE tooth lives on the right, clear of the headline
+  baseYDesktop: 0,
 };
 
 export function initHero3D() {
@@ -98,14 +98,14 @@ export function initHero3D() {
   /* ---- Build / load the tooth ---- */
   let tooth;
   const material = new THREE.MeshPhysicalMaterial({
-    color: 0xf6fbff,
-    roughness: 0.18,
+    color: 0xffffff,
+    roughness: 0.22,
     metalness: 0.0,
     clearcoat: 1.0,
-    clearcoatRoughness: 0.12,
-    sheen: 0.6,
+    clearcoatRoughness: 0.14,
+    sheen: 0.5,
     sheenColor: new THREE.Color(0x9ff5e6),
-    envMapIntensity: 1.1,
+    envMapIntensity: 0.55, // lower so it reads solid/opaque, not washed-out
   });
 
   if (CONFIG.hero3d.glb) {
