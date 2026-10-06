@@ -34,7 +34,11 @@ export function initDesktopEnhance() {
   initCursor(); // custom cursor dot/ring + magnetic buttons
 
   // Services: 3D tilt toward the cursor + a moving light spot (--mx/--my).
+  // The card carries a long (~1s) entrance transition on transform; swap in a
+  // snappy transition while hovering so the tilt stays responsive, then restore
+  // the CSS transition on leave (the entrance has already run by then).
   document.querySelectorAll(".service-card").forEach((card) => {
+    card.addEventListener("pointerenter", () => { card.style.transition = "transform .25s var(--ease)"; });
     card.addEventListener("pointermove", (e) => {
       const r = card.getBoundingClientRect();
       const px = (e.clientX - r.left) / r.width;
@@ -44,7 +48,7 @@ export function initDesktopEnhance() {
       card.style.transform =
         `perspective(700px) rotateY(${(px - 0.5) * 10}deg) rotateX(${-(py - 0.5) * 10}deg) translateY(-6px)`;
     });
-    card.addEventListener("pointerleave", () => { card.style.transform = ""; });
+    card.addEventListener("pointerleave", () => { card.style.transform = ""; card.style.transition = ""; });
   });
 
   // Doctors: subtle photo parallax within the circular frame.

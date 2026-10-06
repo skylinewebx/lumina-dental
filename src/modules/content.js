@@ -52,15 +52,15 @@ export function renderContent() {
   const fc = document.getElementById("footerCopy");
   if (fc) fc.textContent = `© ${new Date().getFullYear()} ${clinic.name}. All rights reserved.`;
 
-  /* ---- Hero media: scene video (clear) + falling-teeth overlay ---------- */
+  /* ---- Hero media: the scene video is the ONLY hero background ----------- */
   const inc = CONFIG.incoming || {};
   const heroScene = document.getElementById("heroScene");
   if (heroScene && inc.heroScene) {
     heroScene.style.backgroundImage = `url(/assets/videos/${inc.heroScene}-poster.webp)`;
-    heroScene.innerHTML = lazyVideo(inc.heroScene, { className: "hero__scene-video" });
+    // eagerMobile: start the hero loop right after first paint on phones too
+    // (one clip only, post-load, so it never reintroduces load-time jank).
+    heroScene.innerHTML = lazyVideo(inc.heroScene, { className: "hero__scene-video", eagerMobile: true });
   }
-  const heroTeeth = document.getElementById("heroTeeth");
-  if (heroTeeth && inc.teethFall) heroTeeth.innerHTML = lazyVideo(inc.teethFall, { className: "hero__teeth-video" });
 }
 
 /* Heavy, below-the-fold sections — built after first paint / on idle. */

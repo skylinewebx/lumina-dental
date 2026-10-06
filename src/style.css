@@ -507,12 +507,23 @@ html.anim [data-reveal].is-in { opacity: 1; transform: none; }
 
 /* Same gated pattern for the directional card reveals (text stays visible if
    animation never runs). --ex/--ey set the entrance direction per card. */
-html.anim .service-card { opacity: 0; transform: translate(var(--ex, 0px), var(--ey, 50px)); }
+/* Services: alternating L/R slide-in with a slight rotation + scale settle.
+   Transform/opacity only; final state lives here so text never hides if JS
+   fails. Entrance easing is a long power-style curve (~1s). */
+html.anim .service-card {
+  opacity: 0;
+  transform: translate(var(--ex, 0px), var(--ey, 0px)) rotate(var(--er, 0deg)) scale(.94);
+  transition: opacity .8s var(--ease), transform 1s var(--ease);
+}
 html.anim .service-card.is-in { opacity: 1; transform: none; }
+/* Artwork zooms gently as the card lands (container scale, independent of the
+   hover zoom on the inner <img>). */
+html.anim .service-card .service-card__img { transform: scale(1.08); transition: transform 1.1s var(--ease); }
+html.anim .service-card.is-in .service-card__img { transform: scale(1); }
 html.anim .price-item { opacity: 0; transform: translateY(40px); }
 html.anim .price-item.is-in { opacity: 1; transform: none; }
 
-/* ---- Hero: scene video + falling-teeth overlay (no 3D) ----------------- */
+/* ---- Hero: scene video only (no 3D, no overlay) ------------------------ */
 .hero { background: #070b12; }
 :root[data-theme="light"] .hero { background: #f4f7f8; }
 /* Scene video: clear, full-screen. Slight scale gives parallax headroom. */
@@ -521,10 +532,6 @@ html.anim .price-item.is-in { opacity: 1; transform: none; }
   background: #070e18 center/cover no-repeat; will-change: transform;
 }
 .hero__scene-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.1); }
-/* Falling-teeth loop: screen-blended so the dark background drops out (no boxes). */
-.hero__teeth { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; will-change: transform; }
-.hero__teeth-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: screen; transform: scale(1.14); }
-.hero__teeth-video.lazy-video.is-playing { opacity: .55; } /* beat .lazy-video.is-playing */
 /* Readability scrim behind the text only (left on desktop), both themes. */
 .hero::after {
   content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
@@ -644,8 +651,29 @@ html.q-low .hero__bg-video { opacity: .3 !important; }
 /* Keep content above the orbs (nav stays fixed with its own z-index). */
 main, .footer { position: relative; z-index: 1; }
 
+/* Skip rendering work for heavy below-the-fold sections until they near the
+   viewport (and stop it again once they leave). Purely a perf hint — layout
+   and appearance are unchanged. contain-intrinsic-size reserves space so the
+   scrollbar and anchor offsets stay stable. */
+.craft, .studio, .reviews, .howto, .contact, .appointment, .footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
+}
+
 /* ---- Services: moving light spot + self-drawing icons ------------------ */
 .service-card { position: relative; transform-style: preserve-3d; }
+/* Thin glowing teal line that draws itself in beside each card on reveal
+   (scaleY only — glow is a static box-shadow, so nothing expensive animates). */
+.service-card__line {
+  position: absolute; left: 0; top: 16%; width: 2px; height: 68%; z-index: 3;
+  border-radius: 2px; pointer-events: none;
+  background: linear-gradient(180deg, transparent, var(--teal) 22%, var(--teal) 78%, transparent);
+  box-shadow: 0 0 10px color-mix(in oklab, var(--teal) 70%, transparent);
+  transform: scaleY(0); transform-origin: top center;
+}
+.service-card--right .service-card__line { left: auto; right: 0; transform-origin: bottom center; }
+html.anim .service-card__line { transition: transform 1s var(--ease) .15s; }
+html.anim .service-card.is-in .service-card__line { transform: scaleY(1); }
 .service-card::after {
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
   opacity: 0; transition: opacity .4s var(--ease);

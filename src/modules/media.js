@@ -56,11 +56,12 @@ export function initBlurUp() {
 }
 
 /* ---- Lazy video with poster + fade -------------------------------------- */
-export function lazyVideo(name, { className = "", sizesDesktopFirst = true } = {}) {
+export function lazyVideo(name, { className = "", eagerMobile = false } = {}) {
   const poster = `${VID_BASE}/${name}-poster.webp`;
-  // Desktop sources first, mobile fallback via media query on <source>.
+  // eagerMobile marks a clip (the hero) that should begin on phones right after
+  // first paint instead of waiting for the first interaction.
   return `
-  <video class="lazy-video ${className}" data-name="${name}" playsinline muted loop
+  <video class="lazy-video ${className}" data-name="${name}"${eagerMobile ? ' data-eager="1"' : ""} playsinline muted loop
          preload="none" poster="${poster}" aria-hidden="true"></video>`;
 }
 
@@ -107,16 +108,23 @@ export function initLazyVideos() {
   // image/fonts. On phones, wait for the FIRST interaction before touching any
   // video — posters show meanwhile — so video decode never runs during the
   // initial (non-interactive) load. Huge win for throttled/low-end devices.
+  const idle = (fn) => ("requestIdleCallback" in window ? requestIdleCallback(fn, { timeout: 1200 }) : setTimeout(fn, 300));
   const observeAll = () => vids.forEach((v) => io.observe(v));
   const isMobile = window.matchMedia("(max-width: 760px)").matches;
   const schedule = () => {
     if (isMobile) {
+      // Eager clips (the hero) still start on idle right after first paint —
+      // one clip only, post-load, so load-time jank never returns. Everything
+      // else waits for the first interaction.
+      const eager = [...vids].filter((v) => v.dataset.eager);
+      const rest = [...vids].filter((v) => !v.dataset.eager);
+      if (eager.length) idle(() => eager.forEach((v) => io.observe(v)));
       const evs = ["pointerdown", "touchstart", "wheel", "scroll", "keydown"];
-      const go = () => { evs.forEach((e) => window.removeEventListener(e, go)); observeAll(); };
+      const go = () => { evs.forEach((e) => window.removeEventListener(e, go)); rest.forEach((v) => io.observe(v)); };
       evs.forEach((e) => window.addEventListener(e, go, { once: true, passive: true }));
     } else {
       // Desktop: attach on idle so decode stays off the load/TTI path.
-      "requestIdleCallback" in window ? requestIdleCallback(observeAll, { timeout: 1200 }) : setTimeout(observeAll, 300);
+      idle(observeAll);
     }
   };
   if (document.readyState === "complete") schedule();

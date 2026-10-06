@@ -44,12 +44,19 @@ export function initReveals() {
   // Split headings into lines so they can rise in.
   document.querySelectorAll("[data-split]").forEach(splitIntoLines);
 
-  // Directional entrance per service card (via CSS custom props).
-  const dirs = [[-60, 0], [60, 0], [0, 50], [-60, 0], [60, 0], [0, 50], [-60, 0], [60, 0]];
+  // Services: strict alternating slide-in — card 1 from the LEFT, 2 from the
+  // RIGHT, 3 LEFT, 4 RIGHT … with a slight rotation settle. Distance is smaller
+  // on phones (html has overflow-x:clip, so even the full travel never scrolls).
+  const slideDist = window.innerWidth < 760 ? 44 : 96;
   document.querySelectorAll(".service-card").forEach((card, i) => {
-    const [ex, ey] = dirs[i % dirs.length];
-    card.style.setProperty("--ex", ex + "px");
-    card.style.setProperty("--ey", ey + "px");
+    const fromLeft = i % 2 === 0;
+    card.style.setProperty("--ex", (fromLeft ? -slideDist : slideDist) + "px");
+    card.style.setProperty("--ey", "0px");
+    card.style.setProperty("--er", (fromLeft ? -2.5 : 2.5) + "deg");
+    card.classList.toggle("service-card--right", !fromLeft);
+    // Thin glowing teal line that draws itself beside the card on reveal.
+    if (!card.querySelector(".service-card__line"))
+      card.insertAdjacentHTML("afterbegin", '<span class="service-card__line" aria-hidden="true"></span>');
   });
 
   // One observer reveals everything by toggling .is-in (CSS does the motion).

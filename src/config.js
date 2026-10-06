@@ -201,11 +201,8 @@ export const CONFIG = {
      Leave empty to keep the current built-in placeholders. Fill a path/array
      and the matching feature switches on automatically.                     */
   incoming: {
-    fallingTeeth: ["teeth/tooth-1", "teeth/tooth-2", "teeth/tooth-3", "teeth/tooth-4", "teeth/tooth-5", "teeth/tooth-6"],
-    heroScene: "hero-scene",          // tooth/island/ocean/sunset video behind the 3D tooth
-    teethFall: "teeth-fall",          // falling-teeth loop video (hero)
+    heroScene: "hero-scene",          // sole hero background (seamless-loop ocean/sunset scene)
     doctorsLoop: "doctors-loop",      // ambient clinic video behind the doctors section
-    particles: "fx/particles",        // teal bokeh overlay
   },
 
   /* ---- Asset paths (legacy swap points) --------------------------------- */

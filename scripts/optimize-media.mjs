@@ -17,10 +17,11 @@ const ffmpeg = (await import("@ffmpeg-installer/ffmpeg")).default.path;
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const SRC = "C:/Users/HP/Downloads/assets"; // the user's dragged-in assets folder
+const SRC_CLINIC = "C:/Users/HP/Downloads/Lumina Dental"; // clinic interior stills (IMAGE B/C)
 
 const IMG_OUT = resolve(ROOT, "public/assets/images");
 const VID_OUT = resolve(ROOT, "public/assets/videos");
-for (const d of [IMG_OUT, resolve(IMG_OUT, "treatments"), resolve(IMG_OUT, "teeth"), resolve(IMG_OUT, "fx"), VID_OUT])
+for (const d of [IMG_OUT, resolve(IMG_OUT, "treatments"), VID_OUT])
   mkdirSync(d, { recursive: true });
 
 const manifest = { images: {}, videos: {} };
@@ -46,18 +47,25 @@ async function image(srcFile, name, { widths, ratio = null } = {}) {
 }
 
 function ff(args) { execFileSync(ffmpeg, args, { stdio: ["ignore", "ignore", "ignore"] }); }
-async function video(srcFile, name) {
+async function video(srcFile, name, { seamless = false } = {}) {
   const input = resolve(SRC, srcFile);
   if (!existsSync(input)) { console.warn("! missing", srcFile); return; }
   const variants = [
     { suffix: "desktop", scale: "1280:-2", crf: 28 },
     { suffix: "mobile", scale: "854:-2", crf: 30 },
   ];
+  // Seamless loop: play the clip forward then reversed. The forward→reverse
+  // join shares its last frame and the reverse→forward wrap shares the first,
+  // so a <video loop> repeats with no visible seam at all (and no runtime cost).
+  const vf = (scale) => seamless
+    ? `[0:v]scale=${scale},split[f][r];[r]reverse[rr];[f][rr]concat=n=2:v=1:a=0`
+    : `scale=${scale}`;
+  const vfArg = (scale) => seamless ? ["-filter_complex", vf(scale)] : ["-vf", `scale=${scale}`];
   for (const v of variants) {
-    ff(["-y", "-i", input, "-an", "-vf", `scale=${v.scale}`, "-c:v", "libx264", "-crf", String(v.crf),
+    ff(["-y", "-i", input, "-an", ...vfArg(v.scale), "-c:v", "libx264", "-crf", String(v.crf),
       "-preset", "slow", "-pix_fmt", "yuv420p", "-movflags", "+faststart",
       resolve(VID_OUT, `${name}-${v.suffix}.mp4`)]);
-    ff(["-y", "-i", input, "-an", "-vf", `scale=${v.scale}`, "-c:v", "libvpx-vp9", "-crf", String(v.crf + 4),
+    ff(["-y", "-i", input, "-an", ...vfArg(v.scale), "-c:v", "libvpx-vp9", "-crf", String(v.crf + 4),
       "-b:v", "0", "-row-mt", "1", resolve(VID_OUT, `${name}-${v.suffix}.webm`)]);
   }
   const framePng = resolve(VID_OUT, `${name}-frame.png`);
@@ -76,11 +84,9 @@ const T = [["cosmetic", "cosmetic.jpg"], ["crowns", "crowns.jpg"], ["emergency",
   ["preventive", "preventive.jpg"], ["root-canal", "root-cana.jpg"]];
 for (const [name, file] of T) await image(file, `treatments/${name}`, { widths: [480, 800, 1200], ratio: 2400 / 1792 });
 
-/* Falling-tooth images (glossy tooth on dark; used with screen-blend) */
-for (let i = 1; i <= 6; i++) await image(`asset 1/tooth ${i}.jpg`, `teeth/tooth-${i}`, { widths: [320, 560] });
-
-/* Teal particle overlay */
-await image("assets 8.jpg", "fx/particles", { widths: [1024, 1600] });
+/* Clinic interior stills for the Studio section (≈4:3 landscape). */
+await image(resolve(SRC_CLINIC, "IMAGE B (2).jpg"), "clinic-reception", { widths: [480, 800, 1200, 1800], ratio: 2400 / 1792 });
+await image(resolve(SRC_CLINIC, "IMAGE C (2).jpg"), "clinic-room", { widths: [480, 800, 1200, 1800], ratio: 2400 / 1792 });
 
 /* Doctor full-body portraits (3:4) */
 await image("Male_dentist_smiling_in_studio_2K_20261006020226.jpg", "doctor-james", { widths: [300, 600, 1000, 1400], ratio: 3 / 4 });
@@ -92,9 +98,9 @@ await sharp(resolve(SRC, "assets 10.jpg")).resize(1200, 630, { fit: "cover", pos
   .jpeg({ quality: 82 }).toFile(resolve(IMG_OUT, "og-image.jpg"));
 console.log("✓ og-image.jpg (1200x630)");
 
-/* Videos */
-await video("asset 3.mp4", "hero-scene");        // tooth/island/ocean/sunset behind the 3D tooth
-await video("assets 2.mp4", "teeth-fall");       // falling teeth loop (hero)
+/* Videos — the hero scene is encoded as a seamless (boomerang) loop so it
+   repeats with no visible pause or jump; one clip, zero runtime cost. */
+await video("asset 3.mp4", "hero-scene", { seamless: true }); // sole hero background
 await video("Dental_clinic_interior_camera_drift_20261006043704.mp4", "doctors-loop"); // doctors ambience
 
 writeFileSync(resolve(ROOT, "src/assets-manifest.json"), JSON.stringify(manifest, null, 2));

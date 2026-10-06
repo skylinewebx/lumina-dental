@@ -23,13 +23,12 @@ export function initEffects() {
   initDebugOverlay();
 }
 
-/* ---- Hero parallax: scene + teeth layers drift toward the cursor -------- */
+/* ---- Hero parallax: the scene drifts gently toward the cursor ----------- */
 /* Delta-time damped, pointer + touch, pauses off-screen; runs only while the
    target is still moving toward rest, so it idles at zero cost. */
 function initHeroParallax() {
   if (reduced) return;
   const scene = document.querySelector(".hero__scene");
-  const teeth = document.querySelector(".hero__teeth");
   const hero = document.getElementById("hero");
   if (!scene || !hero) return;
   let tx = 0, ty = 0, cx = 0, cy = 0, visible = true, active = false, last = 0;
@@ -43,8 +42,7 @@ function initHeroParallax() {
     const f = 1 - Math.pow(1 - 0.06, dt * 60); // calm, heavy damping
     cx += (tx - cx) * f; cy += (ty - cy) * f;
     if (visible && !document.hidden) {
-      scene.style.transform = `translate3d(${cx * -9}px, ${cy * -9}px, 0)`;   // background: small
-      if (teeth) teeth.style.transform = `translate3d(${cx * -20}px, ${cy * -20}px, 0)`; // foreground: more
+      scene.style.transform = `translate3d(${cx * -9}px, ${cy * -9}px, 0)`;
     }
     if (Math.abs(tx - cx) > 0.0005 || Math.abs(ty - cy) > 0.0005) requestAnimationFrame(loop);
     else active = false;
