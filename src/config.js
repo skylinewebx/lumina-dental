@@ -197,15 +197,6 @@ export const CONFIG = {
     { label: "5:00", available: false },
   ],
 
-  /* ---- 3D hero model -----------------------------------------------------
-     Leave `glb` empty to use the built-in procedural tooth geometry.
-     To swap in a downloaded model, drop the file in /public/assets/models/
-     and set:  glb: "/assets/models/tooth.glb"                               */
-  hero3d: {
-    glb: "",
-    glowColor: "#3FD0C0",
-  },
-
   /* ---- Incoming assets (wire in when the files arrive) -------------------
      Leave empty to keep the current built-in placeholders. Fill a path/array
      and the matching feature switches on automatically.                     */

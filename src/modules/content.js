@@ -52,18 +52,15 @@ export function renderContent() {
   const fc = document.getElementById("footerCopy");
   if (fc) fc.textContent = `© ${new Date().getFullYear()} ${clinic.name}. All rights reserved.`;
 
-  /* ---- Hero media: scene video + falling-teeth (video + drifting PNGs) ---- */
+  /* ---- Hero media: scene video (clear) + falling-teeth overlay ---------- */
   const inc = CONFIG.incoming || {};
   const heroScene = document.getElementById("heroScene");
   if (heroScene && inc.heroScene) {
     heroScene.style.backgroundImage = `url(/assets/videos/${inc.heroScene}-poster.webp)`;
     heroScene.innerHTML = lazyVideo(inc.heroScene, { className: "hero__scene-video" });
   }
-
   const heroTeeth = document.getElementById("heroTeeth");
   if (heroTeeth && inc.teethFall) heroTeeth.innerHTML = lazyVideo(inc.teethFall, { className: "hero__teeth-video" });
-  const heroFx = document.getElementById("heroFx");
-  if (heroFx && inc.particles) heroFx.innerHTML = responsivePicture(inc.particles, { alt: "", sizes: "100vw" });
 }
 
 /* Heavy, below-the-fold sections — built after first paint / on idle. */

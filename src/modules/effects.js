@@ -18,46 +18,37 @@ export function initEffects() {
   initOrbs();
   initRevealOnce("#slots", "pop");
   initRevealOnce(".footer__big", "is-in");
-  initFallingTeeth();
+  initHeroParallax();
   initAdaptiveQuality();
   initDebugOverlay();
 }
 
-/* ---- Hero falling teeth: drift the tooth PNGs down (delta-time) --------- */
-function initFallingTeeth() {
-  const wrap = document.getElementById("heroTeeth");
-  if (!wrap || reduced) return;
-  const teeth = [...wrap.querySelectorAll(".falling-tooth")];
-  if (!teeth.length) return;
-  const mobile = window.matchMedia("(max-width: 760px)").matches;
-  const parts = teeth.map((el, i) => reset(el, i, true));
-  function reset(el, i, initial) {
-    const size = 44 + Math.random() * 60;
-    el.style.width = size + "px";
-    return {
-      el, x: Math.random() * 100, y: initial ? Math.random() * 100 : -12,
-      vy: 4 + Math.random() * 6, drift: (Math.random() - 0.5) * 6,
-      rot: Math.random() * 360, vr: (Math.random() - 0.5) * 30, size,
-    };
-  }
+/* ---- Hero parallax: scene + teeth layers drift toward the cursor -------- */
+/* Delta-time damped, pointer + touch, pauses off-screen; runs only while the
+   target is still moving toward rest, so it idles at zero cost. */
+function initHeroParallax() {
+  if (reduced) return;
+  const scene = document.querySelector(".hero__scene");
+  const teeth = document.querySelector(".hero__teeth");
   const hero = document.getElementById("hero");
-  let visible = true, last = performance.now(), rafId;
-  new IntersectionObserver((e) => (visible = e[0].isIntersecting), { threshold: 0 }).observe(hero);
-  function tick(now) {
+  if (!scene || !hero) return;
+  let tx = 0, ty = 0, cx = 0, cy = 0, visible = true, active = false, last = 0;
+  const kick = () => { if (!active) { active = true; last = performance.now(); requestAnimationFrame(loop); } };
+  const onMove = (x, y) => { tx = (x / innerWidth) * 2 - 1; ty = (y / innerHeight) * 2 - 1; kick(); };
+  window.addEventListener("pointermove", (e) => onMove(e.clientX, e.clientY), { passive: true });
+  window.addEventListener("touchmove", (e) => { if (e.touches[0]) onMove(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+  new IntersectionObserver((en) => (visible = en[0].isIntersecting), { threshold: 0 }).observe(hero);
+  function loop(now) {
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    const f = 1 - Math.pow(1 - 0.06, dt * 60); // calm, heavy damping
+    cx += (tx - cx) * f; cy += (ty - cy) * f;
     if (visible && !document.hidden) {
-      const limit = document.documentElement.classList.contains("q-low") ? (mobile ? 2 : 4) : parts.length;
-      parts.forEach((p, idx) => {
-        if (idx >= limit) { p.el.style.opacity = "0"; return; }
-        p.el.style.opacity = "";
-        p.y += p.vy * dt; p.x += p.drift * dt; p.rot += p.vr * dt;
-        if (p.y > 112) Object.assign(p, reset(p.el, idx, false));
-        p.el.style.transform = `translate3d(${p.x}vw, ${p.y}vh, 0) rotate(${p.rot}deg)`;
-      });
+      scene.style.transform = `translate3d(${cx * -9}px, ${cy * -9}px, 0)`;   // background: small
+      if (teeth) teeth.style.transform = `translate3d(${cx * -20}px, ${cy * -20}px, 0)`; // foreground: more
     }
-    rafId = requestAnimationFrame(tick);
+    if (Math.abs(tx - cx) > 0.0005 || Math.abs(ty - cy) > 0.0005) requestAnimationFrame(loop);
+    else active = false;
   }
-  rafId = requestAnimationFrame(tick);
 }
 
 /* ---- Debug overlay: live fps + frame time (F key or ?debug=1) ----------- */

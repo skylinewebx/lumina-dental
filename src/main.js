@@ -33,24 +33,6 @@ function boot() {
   if (document.readyState === "complete") schedule();
   else window.addEventListener("load", schedule, { once: true });
 
-  // Defer the heavy 3D (three.js) so page text/layout paint first. The instant
-  // hero poster stays until the live tooth is ready, then crossfades in.
-  let started3D = false;
-  const load3D = () => {
-    if (started3D) return;
-    started3D = true;
-    import("./modules/hero3d.js")
-      .then((m) => m.initHero3D())
-      .catch((err) => console.warn("[hero3d] failed to load; poster kept:", err));
-  };
-  // Activate the live 3D on the FIRST real interaction — natural for a
-  // mouse-follow tooth, and it keeps all WebGL/shader work out of the initial
-  // load so the page stays instantly interactive. A gentle fallback starts it
-  // for passive viewers shortly after load. The instant poster shows meanwhile.
-  const events = ["pointermove", "pointerdown", "touchstart", "wheel", "scroll", "keydown"];
-  const onFirst = () => { events.forEach((e) => window.removeEventListener(e, onFirst)); load3D(); };
-  events.forEach((e) => window.addEventListener(e, onFirst, { once: true, passive: true }));
-
   // Hero headline word reveal (runs after content render).
   revealHero();
 
