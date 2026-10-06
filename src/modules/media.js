@@ -103,11 +103,24 @@ export function initLazyVideos() {
     (entries) => entries.forEach((e) => { if (e.isIntersecting) { attach(e.target); } }),
     { rootMargin: "800px 0px" } // start loading well before it scrolls in
   );
-  // Start observing only after full load so video bytes never compete with the
-  // LCP image/fonts. (Below-fold videos wait for scroll anyway.)
+  // Start observing after full load so video bytes never compete with the LCP
+  // image/fonts. On phones, wait for the FIRST interaction before touching any
+  // video — posters show meanwhile — so video decode never runs during the
+  // initial (non-interactive) load. Huge win for throttled/low-end devices.
   const observeAll = () => vids.forEach((v) => io.observe(v));
-  if (document.readyState === "complete") observeAll();
-  else window.addEventListener("load", observeAll, { once: true });
+  const isMobile = window.matchMedia("(max-width: 760px)").matches;
+  const schedule = () => {
+    if (isMobile) {
+      const evs = ["pointerdown", "touchstart", "wheel", "scroll", "keydown"];
+      const go = () => { evs.forEach((e) => window.removeEventListener(e, go)); observeAll(); };
+      evs.forEach((e) => window.addEventListener(e, go, { once: true, passive: true }));
+    } else {
+      // Desktop: attach on idle so decode stays off the load/TTI path.
+      "requestIdleCallback" in window ? requestIdleCallback(observeAll, { timeout: 1200 }) : setTimeout(observeAll, 300);
+    }
+  };
+  if (document.readyState === "complete") schedule();
+  else window.addEventListener("load", schedule, { once: true });
 
   // Pause videos while off-screen / tab hidden (battery + perf).
   const playIO = new IntersectionObserver(
