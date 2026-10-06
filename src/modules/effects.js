@@ -18,8 +18,46 @@ export function initEffects() {
   initOrbs();
   initRevealOnce("#slots", "pop");
   initRevealOnce(".footer__big", "is-in");
+  initFallingTeeth();
   initAdaptiveQuality();
   initDebugOverlay();
+}
+
+/* ---- Hero falling teeth: drift the tooth PNGs down (delta-time) --------- */
+function initFallingTeeth() {
+  const wrap = document.getElementById("heroTeeth");
+  if (!wrap || reduced) return;
+  const teeth = [...wrap.querySelectorAll(".falling-tooth")];
+  if (!teeth.length) return;
+  const mobile = window.matchMedia("(max-width: 760px)").matches;
+  const parts = teeth.map((el, i) => reset(el, i, true));
+  function reset(el, i, initial) {
+    const size = 44 + Math.random() * 60;
+    el.style.width = size + "px";
+    return {
+      el, x: Math.random() * 100, y: initial ? Math.random() * 100 : -12,
+      vy: 4 + Math.random() * 6, drift: (Math.random() - 0.5) * 6,
+      rot: Math.random() * 360, vr: (Math.random() - 0.5) * 30, size,
+    };
+  }
+  const hero = document.getElementById("hero");
+  let visible = true, last = performance.now(), rafId;
+  new IntersectionObserver((e) => (visible = e[0].isIntersecting), { threshold: 0 }).observe(hero);
+  function tick(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    if (visible && !document.hidden) {
+      const limit = document.documentElement.classList.contains("q-low") ? (mobile ? 2 : 4) : parts.length;
+      parts.forEach((p, idx) => {
+        if (idx >= limit) { p.el.style.opacity = "0"; return; }
+        p.el.style.opacity = "";
+        p.y += p.vy * dt; p.x += p.drift * dt; p.rot += p.vr * dt;
+        if (p.y > 112) Object.assign(p, reset(p.el, idx, false));
+        p.el.style.transform = `translate3d(${p.x}vw, ${p.y}vh, 0) rotate(${p.rot}deg)`;
+      });
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+  rafId = requestAnimationFrame(tick);
 }
 
 /* ---- Debug overlay: live fps + frame time (F key or ?debug=1) ----------- */

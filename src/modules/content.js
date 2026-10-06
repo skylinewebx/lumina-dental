@@ -51,6 +51,25 @@ export function renderContent() {
   });
   const fc = document.getElementById("footerCopy");
   if (fc) fc.textContent = `© ${new Date().getFullYear()} ${clinic.name}. All rights reserved.`;
+
+  /* ---- Hero media: scene video + falling-teeth (video + drifting PNGs) ---- */
+  const inc = CONFIG.incoming || {};
+  const heroScene = document.getElementById("heroScene");
+  if (heroScene && inc.heroScene) {
+    heroScene.style.backgroundImage = `url(/assets/videos/${inc.heroScene}-poster.webp)`;
+    heroScene.innerHTML = lazyVideo(inc.heroScene, { className: "hero__scene-video" });
+  }
+
+  const heroTeeth = document.getElementById("heroTeeth");
+  if (heroTeeth) {
+    let html = inc.teethFall ? lazyVideo(inc.teethFall, { className: "hero__teeth-video" }) : "";
+    (inc.fallingTeeth || []).forEach((key, i) => {
+      html += `<span class="falling-tooth" data-i="${i}">${responsivePicture(key, { alt: "", sizes: "90px", eager: false })}</span>`;
+    });
+    heroTeeth.innerHTML = html;
+  }
+  const heroFx = document.getElementById("heroFx");
+  if (heroFx && inc.particles) heroFx.innerHTML = responsivePicture(inc.particles, { alt: "", sizes: "100vw" });
 }
 
 /* Heavy, below-the-fold sections — built after first paint / on idle. */
@@ -72,6 +91,7 @@ export function renderSections() {
       .map(
         (s) => `
       <article class="service-card" data-cursor>
+        ${s.imgKey ? `<div class="service-card__img">${responsivePicture(s.imgKey, { alt: s.title, sizes: "(max-width:760px) 100vw, 380px" })}</div>` : ""}
         <div class="service-card__icon">${svg(ICONS[s.icon] || ICONS.sparkle)}</div>
         <h3>${s.title}</h3>
         <p>${s.desc}</p>
@@ -99,6 +119,8 @@ export function renderSections() {
         </button>
         <div class="price-panel" id="acc-${i}" role="region" aria-labelledby="accbtn-${i}">
           <div class="price-panel__inner">
+            ${CONFIG.priceImages && CONFIG.priceImages[p.name] ? `<div class="price-panel__media">${responsivePicture(CONFIG.priceImages[p.name], { alt: p.name, sizes: "(max-width:760px) 100vw, 320px" })}</div>` : ""}
+            <div class="price-panel__body">
             <div class="price-panel__meta">
               <div><span class="k">Price</span><span class="v">${p.range}</span></div>
               <div><span class="k">Duration</span><span class="v">${p.duration}</span></div>
@@ -111,6 +133,7 @@ export function renderSections() {
             <button class="btn btn--primary price-panel__book" data-treatment="${p.name}" data-magnetic data-cursor>
               Book this treatment
             </button>
+            </div>
           </div>
         </div>
       </div>`;
@@ -166,6 +189,13 @@ export function renderSections() {
           ${d.photoKey ? responsivePicture(d.photoKey, { alt: "", sizes: "48px" }) : `<span>${d.name.replace("Dr. ", "")[0]}</span>`}
         </button>`).join("") +
       `<button class="specialist__arrow" data-dir="1" aria-label="Next specialist" data-cursor>›</button>`;
+  }
+
+  // Ambient clinic video behind the doctors section.
+  const doctorsBg = document.getElementById("doctorsBg");
+  if (doctorsBg && CONFIG.incoming?.doctorsLoop) {
+    doctorsBg.style.backgroundImage = `url(/assets/videos/${CONFIG.incoming.doctorsLoop}-poster.webp)`;
+    doctorsBg.innerHTML = lazyVideo(CONFIG.incoming.doctorsLoop, { className: "doctors__bg-video" });
   }
 
   /* ---- Stats band (odometer + ring; animated by effects.js on reveal) ---- */

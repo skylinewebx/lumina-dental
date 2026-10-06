@@ -1,66 +1,163 @@
 {
   "images": {
-    "hero-tooth": {
+    "treatments/cosmetic": {
       "widths": [
         480,
         800,
-        1200,
-        1800
+        1200
       ],
-      "ratio": 1.7917,
-      "lqip": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAABwAwCdASoYAA0APu1iqU2ppaOiMAgBMB2JQBOgBC8jRl4bGcAA/vQp4jH8qkap/YkVsLCGFtO5NRmHja/PhuUbG9x96w4eCvuOAlNc5z2+MzgA"
+      "ratio": 1.3392857142857142,
+      "lqip": "data:image/webp;base64,UklGRroAAABXRUJQVlA4IK4AAACwBQCdASoYABIAPu1qq1EppaOiqAqpMB2JYgCdMuN6SBP7vWheOZPyjq1mjuX7UOHds8OUaoAA/vKrzYzrb125Lkj2vk8pmI0jfOQCv1ZA9f7o7s9n7G/3pGRaTqfGpkdGxSIxylCUWwHiYt/I+5WHeTjGC75BHpnE2Dx3o3eHk+O9VE5NUlqKEUSBQG7084DuP42U/iwkPHvJqbJvHZf++4eNzAdD9t6xdxAAAAA="
     },
-    "clinic-reception": {
+    "treatments/crowns": {
       "widths": [
         480,
         800,
-        1200,
-        1800
+        1200
       ],
-      "ratio": 1.3393,
-      "lqip": "data:image/webp;base64,UklGRqgAAABXRUJQVlA4IJwAAAAQBQCdASoYABIAPu1sq1EppaOiqAqpMB2JYwDG9BI/cfrAv8OehYNK040dBk8H+6zMAP7n86Y97jLI38IrR5hN5S1/otBOYtDQypPU1b9TbiniBYoxp675NLvSPI9mV1G2YArnyfoJojZPpza9NvvgZR5snmZOaccMhfkwGQ/PZ6pDJMhhB67v02CM3HVsoqjSaOa1m7VefAAAAAA="
+      "ratio": 1.3392857142857142,
+      "lqip": "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAAAwBACdASoYABIAPu1qrE8ppiQiMBgIATAdiWUApIARSkBoC00QoVmZPQAA/qMqcusJwACSBnUroKmfYqJhBdMfu1Cp48vdxgZHfU5MGDSs1kc74e5pkeqwPJxE4FGYJu/UIBfe9fBIAA=="
     },
-    "clinic-room": {
+    "treatments/emergency": {
       "widths": [
         480,
         800,
-        1200,
-        1800
+        1200
       ],
-      "ratio": 1.3393,
-      "lqip": "data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAAAwBQCdASoYABIAPu1kq1AppSOisBgIATAdiWcAACnciSBoxClkgZOaDpcjaO5VKNG3QAD99wS/39lCOXKHyVpsMxBHpQXoLHHnX2K0rPJhlQEPOvEdcQqK/hVkgiyEn0C5Kt17fmupXiRCTlqkp+NJafL3huaIyRQFAAAA"
+      "ratio": 1.3392857142857142,
+      "lqip": "data:image/webp;base64,UklGRqgAAABXRUJQVlA4IJwAAAAQBQCdASoYABIAPu1qrlCppiQiqAqpMB2JZQCo9BDRZ/d0iM7YxfThfcBwLuqh+WCAAP7wy6XA00nBTXB3t5cefE6Asn70JUQJL3MmQB3IxgLV2AAwx+JMqUUF9MLfAYs8quYGouPEpzOz5Ae+sbdopH+V6f1fMK/q4lNYVMhg2MrI1sfRmTVeJzQanDOw4Ti/LgeqAU/hRY7VgAA="
     },
-    "doctor-emily": {
+    "treatments/implants": {
       "widths": [
-        400,
-        800
+        480,
+        800,
+        1200
+      ],
+      "ratio": 1.3392857142857142,
+      "lqip": "data:image/webp;base64,UklGRpgAAABXRUJQVlA4IIwAAADwBACdASoYABIAPu1qq08ppiOiMBgIATAdiUATplAApASsQ3vAcFj5xYEC0p0lqgAA/vQgZL6XpwTWMjKBgwTqtw8hK/mOwpbN3P7K+TSrv6G9leg0Q6xq8FrbTmM9VqkcxFBErc9by5cd/Qzulmrb2qqh66BtHqFZ/Qq/U0uPsB4mkuYvKIVGCF1AAA=="
+    },
+    "treatments/orthodontics": {
+      "widths": [
+        480,
+        800,
+        1200
+      ],
+      "ratio": 1.3392857142857142,
+      "lqip": "data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAAAQBACdASoYABIAPu1mrE+ppaQmsBgIATAdiWUAACXBJosTLvjsKYhC4AD+7qFYM3o+DIP/wLh0AJcqQ0a/3T8js+YyND4ZX06eyv3Qto2ba/P9sjWb7k7oVXnyuYSLHPqUP8YBQWcwWVtrfNUUjD/dlZ7t8hpqAl+0GgAA"
+    },
+    "treatments/pediatric": {
+      "widths": [
+        480,
+        800,
+        1200
+      ],
+      "ratio": 1.3392857142857142,
+      "lqip": "data:image/webp;base64,UklGRo4AAABXRUJQVlA4IIIAAABwBACdASoYABIAPu1oq08ppiOiMBgIATAdiWMAtsgQtj2YJ4vnCF9z2s9EAAD+7z+Nb98ygfbHZMw8/Yu9T8Mz8/Jllum6uUqbE7EZo4kfQ375i9VmqrGsbLi/bUBl+lmwbzXdtZkix/cNjbM/lC5XgWBqaX12u0QiXfo6UvD3AAAA"
+    },
+    "treatments/preventive": {
+      "widths": [
+        480,
+        800,
+        1200
+      ],
+      "ratio": 1.3392857142857142,
+      "lqip": "data:image/webp;base64,UklGRoIAAABXRUJQVlA4IHYAAADwAwCdASoYABIAPu1kqk2ppaQiMAgBMB2JZwAD5DoN/l+KW3gwPjlgAP7r2WXTNYi9yhKBiGPMcH5rxzAhL+zI2A9ghWktbq2KCz+GI7e3WhztIRhF4oPKXokQBj3wU1Eb7s+IDAuNbCyDPBRZh3eD0vogAAAA"
+    },
+    "treatments/root-canal": {
+      "widths": [
+        480,
+        800,
+        1200
+      ],
+      "ratio": 1.3392857142857142,
+      "lqip": "data:image/webp;base64,UklGRroAAABXRUJQVlA4IK4AAADwBACdASoYABIAPu1sqlEppaOiqAqpMB2JQBOgAkeBgGdzYNXVq6P3cPWCeeFVKkAA/trVj7aG24yOxbR0xJPTN+pgp8dRE0Ff1+WsVx3K9gZ6GcAeVyxCjomP6oQHwLHK6DQOt4dvuvylI9JIZ+9/+OAc73bDPnXy0JSeKgO+ceB/0ekwajnFmfXFJ78GOR4feKo3d5tgdKi9g9NldWeSlftrxx3yvE3hzDgAAAA="
+    },
+    "teeth/tooth-1": {
+      "widths": [
+        320,
+        560
       ],
       "ratio": 1,
-      "lqip": "data:image/webp;base64,UklGRsQAAABXRUJQVlA4ILgAAAAwBQCdASoYABgAPu1crE2ppKSiMBgMATAdiUAWHbGOzfq7Cuhv17zb2+hcyvRtkjp28AD+7oWne9VDfk0ld44fzE7I4ehyqdRaZ2Jzf5qBhrbxURJdA1fQ/4u+tuALrrqIGNDkrcSCMvE7WJ+IodDr6bFVMXco9OWP1kk0MrXUyyHSsX105n7jC8JgmjqU+wVhOtkFuLAEkUUBdaoCCxKFvszxeT9KJDmUqfnwdQ3qwbbuZeLWCwAA"
+      "lqip": "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAAAQBQCdASoYABgAPu1iqE4ppaOiMBgMATAdiWUAuzOOwaoA0MUrgv2K2KxLKjH2CQgAAP7ymOW7fwy1YSeve0gLZl6MCOsCj4ubp32IXFeyM3IpoUPFM/SRzNwX//eQrDoJgr9qa3dE4wnMF3CwGoa1kOYTwD4h9Hw8AA=="
+    },
+    "teeth/tooth-2": {
+      "widths": [
+        320,
+        560
+      ],
+      "ratio": 1,
+      "lqip": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAABQBACdASoYABgAPu1mq06ppaQiKA1RMB2JZwDBzBEc9Lgrfrl1iH7iheAAAP7ymNCn6F6Bx17B7sPh+q4CYdgBgmU7+Gh3NmvR0bmoUMATI3MxWLYr4O5SnzaKWorMlc+SABAV62igvye77c93aoAA"
+    },
+    "teeth/tooth-3": {
+      "widths": [
+        320,
+        560
+      ],
+      "ratio": 1,
+      "lqip": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAADwBACdASoYABgAPt1YpU2opSOiN/qoARAbiWUAvdAh39vejrUObIgSYotETUc0uAAA/vQju03yFu7J4J9Brby3aTppnyXY2SzSN9kJmwPzxZF3zUyLU/YJT2C8EejUfrNNwKFSS8BIa8nhhDAAAA=="
+    },
+    "teeth/tooth-4": {
+      "widths": [
+        320,
+        560
+      ],
+      "ratio": 1,
+      "lqip": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAAAwBACdASoYABgAPuFgpU2oqiOiN/VYAUAcCWUAuwAQ8KsZvXMwRK6uIgAA/vVx6P4yid277BV0RDqRvuTrG5trAg/K1gmjiZifefl1vft6ELNTy+aUklAe8my6bw5kCBk2x9AWdlxWo5t8AAA="
+    },
+    "teeth/tooth-5": {
+      "widths": [
+        320,
+        560
+      ],
+      "ratio": 1,
+      "lqip": "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAACQBACdASoYABgAPu1wsFKppiSiqAgBMB2JYwCdMoABqgSn1RPHUWyn0UI+VAAA/vQjIPr6QD9ShDbZoZyqEt7Xf1NgXIXvaRy1qtoqGBVq6xGnayAdwO3D7tVMujbvX5RVk0wyzfC0TxOrOWRxHxjClHEUxk+hnAAAAA=="
+    },
+    "teeth/tooth-6": {
+      "widths": [
+        320,
+        560
+      ],
+      "ratio": 1,
+      "lqip": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAACwBACdASoYABgAPu1mq08ppaOjKA1RMB2JYwAALnYIHDEfQKcKwLr8d6hPbjjAAP7ymOW907Onl2seLGffTGE4KoxMUcOxPeyif7xwqA5pM2HP3qJGBwGW9UFePK9ts8of012uUn1fNuYYn+tCMAwA"
+    },
+    "fx/particles": {
+      "widths": [
+        1024,
+        1600
+      ],
+      "ratio": 1,
+      "lqip": "data:image/webp;base64,UklGRs4AAABXRUJQVlA4IMIAAABQBQCdASoYABgAPu1aqE2ppKOiN/VYATAdiUAZsLGSjd/MC4aQljnGgz2geH+uIRsHHAAA/vQl1lZ1TaE0NxiTSZ5c39alZc7TX6qBPYBLobWGqs9Suu9aV+GMySBhH8Ny6TksVP2KSyeU2MKBu+/zo7C0t3NECBmeoFQGEUxb0PcVJZA/LshEn9x9kZeyLL6elapAujFW5sw7AsMOiBvRfu6aSwz26lPTGOhuWhGx03wr1YgJqvwvpIGF7j3otgAAAA=="
     },
     "doctor-james": {
       "widths": [
-        400,
-        800
+        300,
+        600,
+        1000,
+        1400
       ],
-      "ratio": 1,
-      "lqip": "data:image/webp;base64,UklGRtQAAABXRUJQVlA4IMgAAACwBQCdASoYABgAPu1oqk8ppiOiMBgIATAdiWQAuwAQ8AL/DrQHosu7Drbqtaod8TE2TvYxMoAA/u6E5DQPNiT/ChZOzzzJiA/0dyBXCyKPWmfHChqjPhnzkiSq5MoGM3zMuf64TTFYrS8y0g4JT+CRSeR0705GHvnE21BBMq0bjdFVc08Am9nR7q61b3JMTZfOhFmem2SPRdCI0iJ8J8LQjJiH1xX58K5miBj17+F6V9z+5z6+K+SXFzHOg8tVkNVfJCKFMFwAAA=="
+      "ratio": 0.75,
+      "lqip": "data:image/webp;base64,UklGRp4AAABXRUJQVlA4IJIAAAAQBQCdASoYACAAPu1mqk2ppaQiMAgBMB2JYwCw7CHqVBwBTcxQYfXZp6EWZ8NG6Z4AAP7uj+2bfYIwNSQMVB3a6FzLT383c+/Z4K1M1LHrLB+vZNq8NaO8Ku7azEU4Q9wbxOzrotqZluYWvOg1UKt03YyjFyWjapfQtmur3lucUGtXuqSrYIhefU0uG4XtzcggAA=="
+    },
+    "doctor-emily": {
+      "widths": [
+        300,
+        600,
+        1000,
+        1400
+      ],
+      "ratio": 0.75,
+      "lqip": "data:image/webp;base64,UklGRpoAAABXRUJQVlA4II4AAADwBACdASoYACAAPu1qqk8ppiOiMBgIATAdiWMAs4AQ9S62UdnPCSjSXMP1i6jDdoAA/uvsyLeaxDu8JDWZnzh8fEh+g8W0nnlB+93U/dTh9MCVaIffQs7Ch9V8DzVje8EhPKqLN2sHgLiQ6CfdIfWiBxJ8qB30kNnOQKyWe7rjs4EyPesCLOzmoF6XNuAA"
     },
     "doctor-sophia": {
       "widths": [
-        400,
-        800
+        300,
+        600,
+        1000,
+        1400
       ],
-      "ratio": 1,
-      "lqip": "data:image/webp;base64,UklGRrYAAABXRUJQVlA4IKoAAAAwBQCdASoYABgAPu1ip02ppaOiMAgBMB2JQBOgO4Aeh9aXxYt9CTQ9kfH9/BR7cI8wgAD+69ub7e7TFSfOlfmPOXQHj3OfBRoaZDMNzvtp31I/DpjWQia6pBsZq9SM3TiHlWNs3Bi/V+b5SBfCGz08dtXmPv8w5llFHqx5esbCebcfzPA+gknQYA8XpAAq02M7QxJ9sA1MRn2xlsAszvDibb5VaLrrFEAAAA=="
+      "ratio": 0.75,
+      "lqip": "data:image/webp;base64,UklGRpYAAABXRUJQVlA4IIoAAABQBQCdASoYACAAPu1sqk8ppiOiMBgIATAdiWUAvkgQ9S6n2TVevYhHJvy/ELvXDzCjyAAA/vDSVnpl1pMdbef6waNzFbLfYKCmBBaPRWD4mhB4+72J+IgKuCEgg3AopBKec/UY1BzwafXM5+Cfq1LdiqArmJciBD+LJGM0uA0n1ocSMBpM7/7OAAA="
     }
   },
-  "videos": {
-    "hero-bg": {
-      "lqip": "data:image/webp;base64,UklGRpwAAABXRUJQVlA4IJAAAADwAwCdASoYAA4APu1iqU2ppaQiMAgBMB2JaACdACHXHQwwdTEiV3qYAP7yncHAGU+Eb3bvNVEGO9+8nHF5drf3iirXKseoqJGtV0YLOFxYt0SaX0siDAgYo0mGnGxgBqy04uf6m0vf29hxcDsn4kIyt30zd7Mo+tvqA9IeNJfn69Q37WYQd3Ub/WUAeA6AAAA="
-    },
-    "tooth-spin": {
-      "lqip": "data:image/webp;base64,UklGRoIAAABXRUJQVlA4IHYAAADQAwCdASoYAA4APu1iqU2ppaOiMAgBMB2JYwCsACHfwVqskH+dAAAA/vQwigdjbkcPDEfZlYQKnm1oV8wpeUTzr48w7VKTcMEgzA1cLD5s+fL0OeEfN3b8k4Mn2Pet9agtOemz4rUKPU0qNPp0m6o6oqQE5DQA"
-    }
-  }
+  "videos": {}
 }

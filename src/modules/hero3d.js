@@ -35,8 +35,8 @@ const TOOTH = {
   idleSwayDeg: 3,    // gentle rotation sway amount
   idleFloat: 0.05,   // gentle vertical bob (world units)
 
-  baseXDesktop: 1.25, // resting offset — centred like the hero recording (clears the headline via the scrim)
-  baseYDesktop: -0.15, // sit just above the waterline
+  baseXDesktop: 0.3,  // sits over the scene's centred island-tooth
+  baseYDesktop: -0.55, // dropped so it overlaps the island tooth (merges visually)
 };
 
 export function initHero3D() {
@@ -48,9 +48,8 @@ export function initHero3D() {
   const MAX_DPR = isMobile ? 1.5 : 2; // lighter render on phones for steady 60fps
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 120);
-  camera.position.set(0, 0.7, 7);
-  camera.lookAt(0, -0.1, 0); // tilt down slightly so the water recedes to a horizon
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+  camera.position.set(0, 0, 7);
 
   const renderer = new THREE.WebGLRenderer({
     canvas, antialias: true, alpha: true, powerPreference: "high-performance",
@@ -69,25 +68,11 @@ export function initHero3D() {
     }
   } catch { /* if detection fails, proceed normally */ }
 
+  // Transparent canvas — the real hero-scene VIDEO (ocean / island / sunset)
+  // plays behind it, so we render only the interactive tooth + particles.
   renderer.setClearColor(0x000000, 0);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.12;
-
-  // ---- Sunset sky + atmosphere (evokes the reference's ocean-at-sunset) ----
-  const theme = () => document.documentElement.getAttribute("data-theme") || "dark";
-  const sky = makeSkyTexture(theme());
-  scene.background = sky;
-  const horizon = new THREE.Color(theme() === "light" ? 0xb4d5d2 : 0x163742);
-  scene.fog = new THREE.Fog(horizon, 9, 24);
-  // Re-tint if the user flips light/dark.
-  const waterColor = () => (theme() === "light" ? 0x9ec9c6 : 0x0a2230);
-  const themeObs = new MutationObserver(() => {
-    scene.background = makeSkyTexture(theme());
-    scene.fog.color.set(theme() === "light" ? 0xcfe8e6 : 0x123042);
-    if (water) water.material.color.set(waterColor());
-    renderer.toneMappingExposure = theme() === "light" ? 1.25 : 1.12;
-  });
-  themeObs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  renderer.toneMappingExposure = 1.15;
 
   // Group we actually move/rotate (so model origin doesn't matter).
   const pivot = new THREE.Group();
@@ -152,18 +137,6 @@ export function initHero3D() {
   /* ---- Sparkle particles (fewer on mobile) ---- */
   const sparkles = buildSparkles(isMobile ? 70 : 140);
   scene.add(sparkles);
-
-  /* ---- Reflective "water" plane (calm ocean catching the sky) ---- */
-  const water = new THREE.Mesh(
-    new THREE.PlaneGeometry(60, 60, 1, 1),
-    new THREE.MeshStandardMaterial({
-      color: theme() === "light" ? 0x9ec9c6 : 0x0a2230, metalness: 0.9, roughness: 0.14,
-      envMapIntensity: 1.2, transparent: true, opacity: 0.92,
-    })
-  );
-  water.rotation.x = -Math.PI / 2;
-  water.position.y = -2.1;
-  scene.add(water);
 
   /* ---- Pointer tracking (normalized -1..1) ---- */
   const pointer = { x: 0, y: 0 };
@@ -273,13 +246,11 @@ export function initHero3D() {
     sparkles.material.opacity = 0.5 + Math.sin(t * 1.5) * 0.2;
 
     // Adaptive: when the global fps monitor flags low performance, drop the
-    // pixel ratio and hide the (costly) water reflection to recover frame rate;
-    // restore them when it recovers.
+    // pixel ratio to recover frame rate; restore it when it recovers.
     if ((++qCheck & 63) === 0) {
       const low = document.documentElement.classList.contains("q-low");
       if (low !== lowState) {
         lowState = low;
-        water.visible = !low;
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, low ? 1 : MAX_DPR));
         resize();
       }

@@ -199,7 +199,7 @@ body.cursor-ready a, body.cursor-ready button { cursor: none; }
   background: radial-gradient(circle, var(--glow), transparent 62%);
   filter: blur(20px); pointer-events: none;
 }
-.hero__inner { position: relative; z-index: 2; max-width: 680px; }
+.hero__inner { position: relative; z-index: 3; max-width: 680px; }
 .hero__eyebrow {
   font-size: .8rem; letter-spacing: .28em; color: var(--teal);
   margin: 0 0 22px; font-weight: 400;
@@ -519,37 +519,66 @@ html.anim .service-card.is-in { opacity: 1; transform: none; }
 html.anim .price-item { opacity: 0; transform: translateY(40px); }
 html.anim .price-item.is-in { opacity: 1; transform: none; }
 
-/* ---- Hero: sunset-ocean backdrop (instant CSS, 3D fades in over it) ----- */
-.hero__sky {
+/* ---- Hero: real scene video + falling teeth + 3D tooth ----------------- */
+.hero__scene {
   position: absolute; inset: 0; z-index: 0; overflow: hidden;
-  background: linear-gradient(180deg, #7d9a9b 0%, #557a7e 30%, #375f67 55%, #163742 80%, #070e18 100%);
+  background: #070e18 center/cover no-repeat; /* poster shows instantly */
 }
-:root[data-theme="light"] .hero__sky {
-  background: linear-gradient(180deg, #e2efed 0%, #cfe5e3 40%, #b4d5d2 70%, #9cc4c0 100%);
-}
-.hero__sun {
-  position: absolute; left: 58%; top: 32%; width: 44vw; height: 44vw; transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(220,240,238,.55), rgba(159,245,230,.18) 38%, transparent 62%);
-  filter: blur(8px); pointer-events: none;
-}
-.hero__water {
-  position: absolute; left: 0; right: 0; bottom: 0; height: 42%;
-  background: linear-gradient(180deg, transparent, rgba(7,14,24,.55)),
-              linear-gradient(180deg, rgba(55,95,103,.3), rgba(7,14,24,.72));
-}
-:root[data-theme="light"] .hero__water {
-  background: linear-gradient(180deg, transparent, rgba(156,196,192,.55));
-}
-.hero__canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; opacity: 0; transition: opacity 1.2s var(--ease); }
+.hero__scene-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* Falling teeth: pre-rendered loop + drifting PNG teeth (screen-blended) */
+.hero__teeth { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; mix-blend-mode: screen; }
+.hero__teeth-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .5; }
+.falling-tooth { position: absolute; top: 0; left: 0; display: block; will-change: transform; opacity: .85; }
+.falling-tooth .pic, .falling-tooth img { width: 100%; height: auto; display: block; }
+/* Teal particle overlay */
+.hero__fx { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; mix-blend-mode: screen; opacity: .5; }
+.hero__fx .pic, .hero__fx img { width: 100%; height: 100%; object-fit: cover; }
+
+.hero__canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; opacity: 0; transition: opacity 1.2s var(--ease); }
 .hero.is-3d-ready .hero__canvas { opacity: 1; }
-/* Readability scrim behind the headline/text (over the sunset), both themes. */
+/* Readability scrim behind the headline/text, both themes. */
 .hero::after {
-  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: linear-gradient(95deg, rgba(5,10,18,.6) 0%, rgba(5,10,18,.18) 42%, transparent 66%);
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(95deg, rgba(5,10,18,.72) 0%, rgba(5,10,18,.28) 42%, transparent 66%),
+              linear-gradient(0deg, rgba(5,10,18,.5), transparent 30%);
 }
 :root[data-theme="light"] .hero::after {
-  background: linear-gradient(95deg, rgba(244,247,248,.72) 0%, rgba(244,247,248,.25) 45%, transparent 68%);
+  background: linear-gradient(95deg, rgba(244,247,248,.78) 0%, rgba(244,247,248,.3) 45%, transparent 68%);
 }
+
+/* ---- Service cards with treatment photo -------------------------------- */
+.service-card { padding: 0; overflow: hidden; }
+.service-card__img { position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
+.service-card__img .pic, .service-card__img img { width: 100%; height: 100%; object-fit: cover; }
+.service-card__img img { transition: transform .7s var(--ease); }
+.service-card:hover .service-card__img img { transform: scale(1.06); }
+.service-card__img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, var(--surface), transparent 55%); }
+.service-card__icon { position: relative; z-index: 2; margin: -26px 0 14px 24px; background: var(--bg-2); }
+.service-card h3 { padding: 0 24px; }
+.service-card p { padding: 0 24px 26px; }
+
+/* ---- Pricing panel with treatment photo -------------------------------- */
+.price-panel__inner { display: grid; grid-template-columns: 280px 1fr; gap: 22px; padding: 0 24px 22px; align-items: start; }
+.price-panel__media { aspect-ratio: 4 / 3; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); margin-top: 2px; }
+.price-panel__media .pic, .price-panel__media img { width: 100%; height: 100%; object-fit: cover; }
+.price-panel__body .price-panel__meta { padding: 2px 0 16px; }
+.price-panel__body .price-panel__includes { padding: 0 0 16px; }
+.price-panel__body .price-panel__book { margin: 4px 0 0; }
+@media (max-width: 760px) { .price-panel__inner { grid-template-columns: 1fr; } }
+
+/* ---- Doctors ambient video --------------------------------------------- */
+.section.doctors { position: relative; }
+.doctors__bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; border-radius: 40px; background: #070b12 center/cover no-repeat; opacity: .16; }
+.doctors__bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.doctors .section__head, .doctors .specialist { position: relative; z-index: 1; }
+.specialist__thumb img { object-position: 50% 12%; }
+
+/* ---- Film grain overlay (procedural) ----------------------------------- */
+.grain {
+  position: fixed; inset: 0; z-index: 1001; pointer-events: none; opacity: .045; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@media (prefers-reduced-motion: reduce) { .grain { display: none; } }
 
 /* ---- blur-up + lazy video --------------------------------------------- */
 

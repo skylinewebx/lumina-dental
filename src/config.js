@@ -48,16 +48,17 @@ export const CONFIG = {
     x: "https://x.com",
   },
 
-  /* ---- Services (6–8). Each card enters from a different direction. ------ */
+  /* ---- Services. Each card enters from a different direction. ------------
+     imgKey = treatment photo key in the manifest.                           */
   services: [
-    { icon: "sparkle", title: "Preventive Care", desc: "Cleanings, exams & sealants that keep problems away." },
-    { icon: "whiten", title: "Cosmetic Dentistry", desc: "Whitening, veneers & smile makeovers, tastefully done." },
-    { icon: "implant", title: "Dental Implants", desc: "Permanent, natural-feeling replacements for lost teeth." },
-    { icon: "align", title: "Orthodontics", desc: "Braces & clear aligners for quietly confident smiles." },
-    { icon: "root", title: "Root Canal Therapy", desc: "Pain-free endodontics with modern rotary systems." },
-    { icon: "kids", title: "Pediatric Dentistry", desc: "Gentle, playful visits that children look forward to." },
-    { icon: "crown", title: "Crowns & Bridges", desc: "Durable, precisely-matched restorations in-house." },
-    { icon: "emergency", title: "Emergency Care", desc: "Same-day relief when a tooth just can't wait." },
+    { icon: "sparkle", title: "Preventive Care", desc: "Cleanings, exams & sealants that keep problems away.", imgKey: "treatments/preventive" },
+    { icon: "whiten", title: "Cosmetic Dentistry", desc: "Whitening, veneers & smile makeovers, tastefully done.", imgKey: "treatments/cosmetic" },
+    { icon: "implant", title: "Dental Implants", desc: "Permanent, natural-feeling replacements for lost teeth.", imgKey: "treatments/implants" },
+    { icon: "align", title: "Orthodontics", desc: "Braces & clear aligners for quietly confident smiles.", imgKey: "treatments/orthodontics" },
+    { icon: "root", title: "Root Canal Therapy", desc: "Pain-free endodontics with modern rotary systems.", imgKey: "treatments/root-canal" },
+    { icon: "kids", title: "Pediatric Dentistry", desc: "Gentle, playful visits that children look forward to.", imgKey: "treatments/pediatric" },
+    { icon: "crown", title: "Crowns & Bridges", desc: "Durable, precisely-matched restorations in-house.", imgKey: "treatments/crowns" },
+    { icon: "emergency", title: "Emergency Care", desc: "Same-day relief when a tooth just can't wait.", imgKey: "treatments/emergency" },
   ],
 
   /* ---- Treatment prices (at least 8). Realistic sample prices. ---------- */
@@ -116,6 +117,14 @@ export const CONFIG = {
     },
   ],
   pricesNote: "Prices are indicative. Final cost is confirmed after the consultation.",
+  // Treatment photo shown in each accordion panel (manifest key by price name).
+  priceImages: {
+    "Check-up & Cleaning": "treatments/preventive", "Teeth Whitening": "treatments/cosmetic",
+    "Dental Filling": "treatments/preventive", "Root Canal": "treatments/root-canal",
+    "Dental Crown": "treatments/crowns", "Dental Implant": "treatments/implants",
+    "Braces (metal)": "treatments/orthodontics", "Clear Aligners": "treatments/orthodontics",
+    "Wisdom Tooth Removal": "treatments/emergency", "Kids Dentistry": "treatments/pediatric",
+  },
 
   /* ---- "How it works" steps --------------------------------------------- */
   howItWorks: [
@@ -201,11 +210,11 @@ export const CONFIG = {
      Leave empty to keep the current built-in placeholders. Fill a path/array
      and the matching feature switches on automatically.                     */
   incoming: {
-    // Hero "falling teeth": list the transparent PNG keys (run `npm run media`
-    // after dropping files in /public/assets/images/teeth/). Empty = off.
-    fallingTeeth: [],                 // e.g. ["tooth-a","tooth-b","tooth-c"]
-    heroSceneVideo: "",               // /assets/videos/hero-scene.mp4 (optional backdrop)
-    doctorsLoopVideo: "",             // /assets/videos/doctors-loop.mp4 (optional ambient)
+    fallingTeeth: ["teeth/tooth-1", "teeth/tooth-2", "teeth/tooth-3", "teeth/tooth-4", "teeth/tooth-5", "teeth/tooth-6"],
+    heroScene: "hero-scene",          // tooth/island/ocean/sunset video behind the 3D tooth
+    teethFall: "teeth-fall",          // falling-teeth loop video (hero)
+    doctorsLoop: "doctors-loop",      // ambient clinic video behind the doctors section
+    particles: "fx/particles",        // teal bokeh overlay
   },
 
   /* ---- Asset paths (legacy swap points) --------------------------------- */
