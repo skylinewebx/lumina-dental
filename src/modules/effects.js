@@ -136,12 +136,15 @@ function initReviewsMarquee() {
   wrap.addEventListener("pointerenter", () => (paused = true));
   wrap.addEventListener("pointerleave", () => (paused = false));
 
-  const speed = 0.35;
-  function step() {
+  const pxPerSec = 21; // delta-time speed → identical at any refresh rate
+  let last = performance.now();
+  function step(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
     if (!paused && visible) {
-      xa -= speed; if (Math.abs(xa) >= half(a)) xa = 0;
+      const d = pxPerSec * dt;
+      xa -= d; if (Math.abs(xa) >= half(a)) xa = 0;
       a.style.transform = `translate3d(${xa}px,0,0)`;
-      xb += speed; if (xb >= 0) xb = -half(b);
+      xb += d; if (xb >= 0) xb = -half(b);
       b.style.transform = `translate3d(${xb}px,0,0)`;
     }
     rafId = requestAnimationFrame(step);
@@ -212,10 +215,12 @@ function initOrbs() {
   const orbs = [...document.querySelectorAll(".orb")];
   if (!orbs.length || reduced) return;
   const factors = [0.12, -0.08, 0.05];
-  let targetY = 0, curY = 0, raf = null, running = true;
-  const onScroll = () => { targetY = window.scrollY; if (!raf) raf = requestAnimationFrame(loop); };
-  function loop() {
-    curY += (targetY - curY) * 0.08;
+  let targetY = 0, curY = 0, raf = null, running = true, last = performance.now();
+  const onScroll = () => { targetY = window.scrollY; if (!raf) { last = performance.now(); raf = requestAnimationFrame(loop); } };
+  function loop(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    const f = 1 - Math.pow(1 - 0.08, dt * 60); // delta-time damping
+    curY += (targetY - curY) * f;
     orbs.forEach((o, i) => { o.style.transform = `translate3d(0, ${curY * factors[i % factors.length]}px, 0)`; });
     if (Math.abs(targetY - curY) > 0.5 && running) raf = requestAnimationFrame(loop);
     else raf = null;

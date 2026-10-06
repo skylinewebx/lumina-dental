@@ -35,7 +35,8 @@ const TOOTH = {
   idleSwayDeg: 3,    // gentle rotation sway amount
   idleFloat: 0.05,   // gentle vertical bob (world units)
 
-  baseXDesktop: 2.0, // resting offset to the right so it clears the headline
+  baseXDesktop: 1.25, // resting offset — centred like the hero recording (clears the headline via the scrim)
+  baseYDesktop: -0.15, // sit just above the waterline
 };
 
 export function initHero3D() {
@@ -76,7 +77,7 @@ export function initHero3D() {
   const theme = () => document.documentElement.getAttribute("data-theme") || "dark";
   const sky = makeSkyTexture(theme());
   scene.background = sky;
-  const horizon = new THREE.Color(theme() === "light" ? 0xbfe0dd : 0x123042);
+  const horizon = new THREE.Color(theme() === "light" ? 0xb4d5d2 : 0x163742);
   scene.fog = new THREE.Fog(horizon, 9, 24);
   // Re-tint if the user flips light/dark.
   const waterColor = () => (theme() === "light" ? 0x9ec9c6 : 0x0a2230);
@@ -202,6 +203,7 @@ export function initHero3D() {
   let running = false;
   let rafId = null;
   let signalledReady = false;
+  let qCheck = 0, lowState = false; // react to the global adaptive-quality flag
 
   function start() {
     if (running) return;
@@ -253,7 +255,7 @@ export function initHero3D() {
 
       // Position: a small drift toward the cursor (not a big travel).
       let posX = baseX + pointer.x * TOOTH.moveX;
-      let posY = pointer.y * TOOTH.moveY;
+      let posY = (isMobile ? 0 : TOOTH.baseYDesktop) + pointer.y * TOOTH.moveY;
 
       if (idle && !reduced) {
         // Very subtle idle sway + float when the pointer is still.
@@ -269,6 +271,19 @@ export function initHero3D() {
 
     sparkles.rotation.y = t * 0.03;
     sparkles.material.opacity = 0.5 + Math.sin(t * 1.5) * 0.2;
+
+    // Adaptive: when the global fps monitor flags low performance, drop the
+    // pixel ratio and hide the (costly) water reflection to recover frame rate;
+    // restore them when it recovers.
+    if ((++qCheck & 63) === 0) {
+      const low = document.documentElement.classList.contains("q-low");
+      if (low !== lowState) {
+        lowState = low;
+        water.visible = !low;
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, low ? 1 : MAX_DPR));
+        resize();
+      }
+    }
 
     renderer.render(scene, camera);
 
@@ -340,8 +355,8 @@ function buildEnvScene() {
     m.lookAt(0, 0, 0);
     s.add(m);
   };
-  makeLight(0xffe3c0, 0, 7, 3, 9);   // warm sun (top)
-  makeLight(0xff9e6a, 2, 2, 6, 7);   // sunset glow
+  makeLight(0xeef6f4, 0, 7, 3, 9);   // soft diffuse sky light (top)
+  makeLight(0xbfe0dd, 3, 2, 6, 7);   // pale teal fill
   makeLight(0x3fd0c0, -8, 0, 3, 7);  // teal
   makeLight(0x9ff5e6, 6, -4, -4, 6); // mint rim
   return s;
@@ -354,12 +369,13 @@ function makeSkyTexture(mode = "dark") {
   c.width = 4; c.height = 256;
   const ctx = c.getContext("2d");
   const g = ctx.createLinearGradient(0, 0, 0, 256);
+  // Calm teal-grey water-and-sky, matching the hero recording's landing state.
   if (mode === "light") {
-    g.addColorStop(0, "#ffd9b0"); g.addColorStop(0.35, "#ffe9d6");
-    g.addColorStop(0.62, "#cfeceb"); g.addColorStop(1, "#afd7d4");
+    g.addColorStop(0, "#e2efed"); g.addColorStop(0.4, "#cfe5e3");
+    g.addColorStop(0.7, "#b4d5d2"); g.addColorStop(1, "#9cc4c0");
   } else {
-    g.addColorStop(0, "#f7a878"); g.addColorStop(0.28, "#d98a74");
-    g.addColorStop(0.52, "#4a7f84"); g.addColorStop(0.78, "#143544");
+    g.addColorStop(0, "#7d9a9b"); g.addColorStop(0.3, "#557a7e");
+    g.addColorStop(0.55, "#375f67"); g.addColorStop(0.8, "#163742");
     g.addColorStop(1, "#070e18");
   }
   ctx.fillStyle = g; ctx.fillRect(0, 0, 4, 256);

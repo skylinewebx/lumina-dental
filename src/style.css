@@ -522,23 +522,23 @@ html.anim .price-item.is-in { opacity: 1; transform: none; }
 /* ---- Hero: sunset-ocean backdrop (instant CSS, 3D fades in over it) ----- */
 .hero__sky {
   position: absolute; inset: 0; z-index: 0; overflow: hidden;
-  background: linear-gradient(180deg, #f7a878 0%, #d98a74 28%, #4a7f84 52%, #143544 78%, #070e18 100%);
+  background: linear-gradient(180deg, #7d9a9b 0%, #557a7e 30%, #375f67 55%, #163742 80%, #070e18 100%);
 }
 :root[data-theme="light"] .hero__sky {
-  background: linear-gradient(180deg, #ffd9b0 0%, #ffe9d6 35%, #cfeceb 62%, #afd7d4 100%);
+  background: linear-gradient(180deg, #e2efed 0%, #cfe5e3 40%, #b4d5d2 70%, #9cc4c0 100%);
 }
 .hero__sun {
-  position: absolute; left: 62%; top: 34%; width: 42vw; height: 42vw; transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(255,226,180,.9), rgba(255,160,110,.35) 35%, transparent 60%);
-  filter: blur(6px); pointer-events: none;
+  position: absolute; left: 58%; top: 32%; width: 44vw; height: 44vw; transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(220,240,238,.55), rgba(159,245,230,.18) 38%, transparent 62%);
+  filter: blur(8px); pointer-events: none;
 }
 .hero__water {
   position: absolute; left: 0; right: 0; bottom: 0; height: 42%;
   background: linear-gradient(180deg, transparent, rgba(7,14,24,.55)),
-              linear-gradient(180deg, rgba(74,127,132,.25), rgba(7,14,24,.7));
+              linear-gradient(180deg, rgba(55,95,103,.3), rgba(7,14,24,.72));
 }
 :root[data-theme="light"] .hero__water {
-  background: linear-gradient(180deg, transparent, rgba(175,215,212,.5));
+  background: linear-gradient(180deg, transparent, rgba(156,196,192,.55));
 }
 .hero__canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; opacity: 0; transition: opacity 1.2s var(--ease); }
 .hero.is-3d-ready .hero__canvas { opacity: 1; }
